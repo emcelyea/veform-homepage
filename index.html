@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Veform</title>
+    <meta
+      name="description"
+      content="Transform your app's forms into natural voice conversations. ConversAI brings intelligent audio-driven form completion to your products."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+
+      :root {
+        --primary: rgb(85, 246, 245);
+        --primary-dark: rgb(55, 186, 200);
+        --secondary: rgb(24, 140, 190);
+        --accent: #00dd00;
+        --dark: #000000;
+        --dark-light: #1a1a1a;
+        --gray: #a0a0a0;
+        --light: #1a1a1a;
+        --white: #ffffff;
+      }
+
+      body {
+        font-family: "Nunito Sans", -apple-system, BlinkMacSystemFont,
+          "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", sans-serif;
+        line-height: 1.6;
+        color: var(--white);
+        background: var(--dark);
+        overflow-x: hidden;
+        margin: 0;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 .5rem;
+        position: relative;
+      }
+
+      /* Header & Navigation */
+      header {
+        background: rgba(20, 20, 20, 0.95);
+        position: fixed;
+        width: 100%;
+        top: 0;
+        z-index: 1000;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.5rem;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .logo {
+        font-size: 1.5rem;
+        font-weight: 200;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 2rem;
+        list-style: none;
+        align-items: center;
+      }
+
+      .nav-links a {
+        text-decoration: none;
+        color: var(--white);
+        font-weight: 500;
+        transition: color 0.3s;
+      }
+
+      .nav-links a:hover {
+        color: var(--secondary);
+      }
+
+      /* Hero Section */
+      .hero {
+        color: var(--white);
+        position: relative;
+        width: 100%;
+        margin: 0 auto;
+        margin-top: 102px;
+      }
+      .hero-content {
+        max-width: 1200px;
+        width: calc(100% - 4rem);
+        margin: 0 auto;
+        position: relative;
+        z-index: 1;
+        padding: 6rem 1rem 4rem;
+        text-align: center;
+        overflow: hidden;
+        border: 3px dashed var(--primary);
+        border-radius: 16px;
+      }
+      .larryimage {
+        position: absolute;
+        width: 220px;
+        top: 120px;
+        left: -40px;
+        transform: rotate(15deg);
+        animation: fadeIn 10s ease-in-out infinite;
+      }
+      @keyframes fadeIn {
+        0% {
+          opacity: 0;
+        }
+        40% {
+          opacity: 0;
+        }
+        50% {
+          opacity: 1;
+        }
+        70% {
+          opacity: 0;
+        }
+        100% {
+          opacity: 0;
+        }
+      }
+      .larrysnow {
+        position: absolute;
+        width: 140px;
+        bottom: -10px;
+        right: 0px;
+        transform: rotate(15deg);
+        z-index: -1;
+        animation: fadeIn2 8s ease-in-out infinite;
+      }
+      @keyframes fadeIn2 {
+        0% {
+          opacity: 0;
+        }
+        40% {
+          opacity: 0;
+        }
+        50% {
+          opacity: 1;
+        }
+        70% {
+          opacity: 0;
+        }
+        100% {
+          opacity: 0;
+        }
+      }
+      .larglasses {
+        position: absolute;
+        width: 100px;
+        bottom: -20px;
+        right: 45%;
+        z-index: -1;
+        animation: fadeIn3 10s ease-in-out infinite;
+        opacity: 0.5;
+      }
+      @keyframes fadeIn3 {
+        0% {
+          opacity: 0;
+        }
+        20% {
+          opacity: 0.75;
+        }
+        40% {
+          opacity: 0;
+        }
+        100% {
+          opacity: 0;
+        }
+      }
+
+      .larteeth {
+        position: absolute;
+        width: 200px;
+        top: -69px;
+        right: 0;
+        z-index: -1;
+        animation: fadeIn4 12s ease-in-out infinite;
+        opacity: 0.5;
+        transform: rotate(-15deg);
+      }
+      @keyframes fadeIn4 {
+        0% {
+          opacity: 0.6;
+        }
+        50% {
+          opacity: 0;
+        }
+        100% {
+          opacity: 0.6;
+        }
+      }
+
+      .larrycuteimage {
+        position: absolute;
+        width: 220px;
+        top: 300px;
+        right: -72px;
+        z-index: 0;
+        animation: cuteIn 8s ease-in-out infinite;
+      }
+
+      @keyframes cuteIn {
+        0% {
+          opacity: 0.75;
+          transform: rotate(20deg);
+        }
+        50% {
+          opacity: 0;
+          transform: rotate(0deg);
+        }
+        100% {
+          opacity: 0.75;
+          transform: rotate(20deg);
+        }
+      }
+      .hero h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        line-height: 1.2;
+      }
+
+      .hero p {
+        font-size: 1.25rem;
+        margin-bottom: 2rem;
+        opacity: 0.95;
+        line-height: 1.8;
+      }
+
+      .hero-buttons {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+        position: relative;
+      }
+      .beforetyping {
+        width: 320px;
+        height: auto;
+        object-fit: contain;
+      }
+      .example-gifs {
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+      .example-gif {
+        width: 48%;
+        margin-right: 1%;
+        margin-left: 1%;
+        min-width: 320px;
+        text-align: center;
+        margin-top: 2rem;
+      }
+      /* Features Section */
+      .features {
+        padding: 6rem 2rem;
+        background: var(--dark);
+      }
+
+      .section-header {
+        text-align: center;
+        margin-bottom: 4rem;
+      }
+
+      .section-header h2 {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+        color: var(--white);
+      }
+
+      .section-header p {
+        font-size: 1.125rem;
+        color: var(--gray);
+        max-width: 600px;
+        margin: 0 auto;
+      }
+
+      /* Benefits Section */
+      .benefits {
+        padding: 6rem 2rem;
+        background: var(--dark-light);
+      }
+
+      .benefits-content {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 4rem;
+        align-items: center;
+        margin-top: 3rem;
+      }
+
+      .benefits-list {
+        list-style: none;
+      }
+
+      .benefit-item {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 2rem;
+        align-items: flex-start;
+      }
+
+      .benefit-icon {
+        width: 30px;
+        height: 30px;
+        background: var(--primary);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        color: var(--white);
+        font-weight: bold;
+      }
+
+      .benefit-item h4 {
+        font-size: 1.25rem;
+        margin-bottom: 0.5rem;
+        color: var(--white);
+      }
+
+      .benefit-item p {
+        color: var(--gray);
+      }
+
+      .benefits-image {
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        border-radius: 16px;
+        padding: 3rem;
+        text-align: center;
+        color: var(--white);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 400px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .benefits-image::before {
+        content: "🎤";
+        font-size: 10rem;
+        opacity: 0.2;
+        position: absolute;
+      }
+
+      /* Footer */
+      footer {
+        color: var(--white);
+        padding: 4rem 2rem 2rem;
+      }
+
+      .footer-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 3rem;
+        margin-bottom: 3rem;
+      }
+
+      .footer-section h4 {
+        margin-bottom: 1rem;
+        font-size: 1.25rem;
+      }
+
+      .footer-section ul {
+        list-style: none;
+      }
+
+      .footer-section ul li {
+        margin-bottom: 0.5rem;
+      }
+
+      .footer-section a {
+        color: rgba(255, 255, 255, 0.7);
+        text-decoration: none;
+        transition: color 0.3s;
+      }
+
+      .footer-section a:hover {
+        color: var(--white);
+      }
+
+      .footer-bottom {
+        text-align: center;
+        padding-top: 2rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        color: rgba(255, 255, 255, 0.7);
+      }
+
+      /* Buttons */
+      .btn {
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s;
+        display: inline-block;
+        border: none;
+        cursor: pointer;
+        font-size: 1rem;
+      }
+
+      .btn-primary {
+        background: linear-gradient(
+          135deg,
+          var(--primary-dark),
+          var(--secondary)
+        );
+        color: #ddd;
+        box-shadow: 0 4px 15px rgba(55, 186, 200, 0.4);
+        font-weight: 700;
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(66, 200, 225, 0.6);
+      }
+
+      .btn-secondary {
+        background: var(--white);
+        color: var(--primary);
+        border: 2px solid var(--primary);
+      }
+
+      .btn-secondary:hover {
+        background: var(--primary);
+        color: var(--white);
+      }
+      /* Responsive */
+      @media (max-width: 768px) {
+        .hero h1 {
+          font-size: 2.5rem;
+        }
+
+        .hero p {
+          font-size: 1.125rem;
+        }
+
+        .benefits-content {
+          grid-template-columns: 1fr;
+        }
+
+        .section-header h2 {
+          font-size: 2rem;
+        }
+      }
+
+
+    </style>
+  </head>
+  <body>
+    <!-- Header -->
+    <header>
+      <nav>
+        <div class="logo">Veform</div>
+        <ul class="nav-links">
+          <li><a href="#features">What</a></li>
+          <li><a href="#integration">Docs</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="hero-content">
+        <h1>Let your users speak</h1>
+        <p>
+          Dead simple iOS, Web and Android library for turning traditional inputs into voice
+          conversations.
+        </p>
+        <a href="./documentation.html" class="btn btn-primary" style="line-height: 16px"
+          >Documentation</a
+        >
+        <img src="./larrysnow.png" class="larrysnow" />
+        <img src="./larglasses.png" class="larglasses" />
+      </div>
+    </section>
+    <section id="features" class="features">
+      <div class="container">
+        <div class="section-header">
+          <h2>Why?</h2>
+          <ul style="max-width: 500px; margin: 0 auto; text-align: left">
+            <li>
+              The future is users having the option to speak with their apps.
+            </li>
+            <li>
+              Interacting with an app should be like talking to a friend or
+              coworker.
+            </li>
+            <li>Repeatedly tapping input into a screen is a chore.</li>
+            <li>
+              Apps should offer the level of accessibility that conversations
+              provide.
+            </li>
+          </ul>
+        </div>
+        <img src="./larrycute.png" class="larrycuteimage" />
+        <img src="./larry.png" class="larryimage" />
+        <div class="container">
+          <img src="./larteeth.jpg" class="larteeth" />
+          <section id="integration" class="example-gifs">
+            <div class="example-gif">
+              <h2>Before</h2>
+              <p>
+                Please don't make me fill this in again by tapping.<br />&nbsp;
+              </p>
+              <img src="./typing.gif" class="beforetyping" />
+            </div>
+
+            <div class="example-gif">
+              <h2>After</h2>
+              <p>
+                Fully customizable conversational form.<br />
+                (demo UI, Veform supports any UI you can imagine)
+              </p>
+              <img src="./voice.gif" class="beforetyping" />
+            </div>
+          </section>
+        </div>
+      </div>
+    </section>
+    <section id="benefits" class="benefits">
+      <div class="section-header">
+        <h2>Seriously customizable</h2>
+        <p>UI/UX is yours, you shouldn't compromise your vision an inch for the sake of a library.</p>
+        <ul style="max-width: 500px; margin: 0 auto; text-align: left;margin-top: 2rem;">
+          <li>
+            Want a conversation only and no traditional UI?
+          </li>
+          <li>
+            Want users to be able to touch/type into inputs while having a conversation?
+          </li>
+          <li>
+            Want one touch input and the rest to be conversational?
+          </li>
+          <li>We support all that. Our philosophy is Veform offloads a specific and challenging subset of problems, but has no opinion about how you use it.</li>
+        </ul>
+      </div>
+      <div class="container" style="text-align: center; margin-top: 2rem;">
+        <a href="#" class="btn btn-primary" style="line-height: 16px"
+        >View Examples</a
+      >
+      </div>
+    </section>
+
+    <footer>
+      <div class="footer-content">
+        <div class="footer-section">
+          <h4>Product</h4>
+          <ul>
+            <li><a href="./documentation.html">Documentation</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Company</h4>
+          <ul>
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 Veform. All rights reserved.</p>
+      </div>
+    </footer>
+  </body>
+</html>
