@@ -68,8 +68,11 @@
         padding: 0.5rem;
         max-width: 1200px;
         margin: 0 auto;
+        box-sizing: border-box;
       }
-
+      footer {
+        display: none;
+      }
       .logo {
         font-size: 1.5rem;
         font-weight: 400;
@@ -184,6 +187,7 @@
       .benefits {
         padding: 6rem 2rem;
         position: relative;
+        overflow: hidden;
       }
 
       .benefits-content {
@@ -286,35 +290,7 @@
         background: var(--primary);
         color: var(--dark);
       }
-      /* Responsive */
-      @media (max-width: 768px) {
-        .hero h1 {
-          font-size: 2.5rem;
-        }
 
-        .hero p {
-          font-size: 1.25rem;
-        }
-        .hero .deco1 {
-          top: -90px;
-          right: -60px;
-        }
-        .hero .deco2 {
-          top: -90px;
-          right: 60px;
-        }
-        .hero .deco3 {
-          top: -120px;
-         right: 180px;
-        }
-        .benefits-content {
-          grid-template-columns: 1fr;
-        }
-
-        .section-header h2 {
-          font-size: 2rem;
-        }
-      }
       .larrycuteimage {
         position: absolute;
         width: 220px;
@@ -343,7 +319,7 @@
         width: 220px;
         top: 120px;
         right: -10px;
-        z-index: 0;
+        z-index: -1;
         animation: cuteIn2 12s ease-in-out infinite;
         opacity: 0.5;
         transform: rotate(15deg);
@@ -355,29 +331,29 @@
       }
       @keyframes cuteIn2 {
         0% {
-          opacity: 0.85;
+          opacity: 0.75;
           transform: rotate(20deg);
         }
         50% {
-          opacity: 0.5;
+          opacity: 0.35;
           transform: rotate(0deg);
         }
         100% {
-          opacity: 0.85;
+          opacity: 0.75;
           transform: rotate(20deg);
         }
       }
       @keyframes cuteIn2Flip {
         0% {
-          opacity: 0.85;
+          opacity: 0.75;
           transform: rotate(-10deg);
         }
         50% {
-          opacity: 0.5;
+          opacity: 0.35;
           transform: rotate(10deg);
         }
         100% {
-          opacity: 0.85;
+          opacity: 0.75;
           transform: rotate(-10deg);
         }
       }
@@ -428,6 +404,75 @@
         border-top: 1px solid rgba(61, 52, 38, 0.1);
         color: var(--gray);
       }
+            /* Responsive */
+            @media (max-width: 768px) {
+        .hero h1 {
+          font-size: 2.5rem;
+        }
+
+        .hero p {
+          font-size: 1.25rem;
+        }
+        .hero .deco1 {
+          top: -90px;
+          right: -60px;
+        }
+        .hero .deco2 {
+          top: -90px;
+          right: 60px;
+        }
+        .hero .deco3 {
+          top: -120px;
+          right: 180px;
+        }
+        .benefits-content {
+          grid-template-columns: 1fr;
+        }
+
+        .section-header h2 {
+          font-size: 2rem;
+        }
+        .larrydraw {
+          top: 110px;
+          width: 200px;
+          height: auto;
+          right: -110px;
+        }
+        .larrydrawflip {
+          top: 100px;
+          width: 200px;
+          height: auto;
+          left: -100px;
+        }
+      }
+            /* Responsive */
+      @media (max-width: 440px) {
+        .hero .deco1 {
+          top: -60px;
+          right: -15px;
+          width: 160px;
+          height: 160px;
+        }
+        .hero .deco2 {
+          top: -90px;
+          right: 50px;
+          width: 250px;
+          height: 250px;
+        }
+        .hero .deco3 {
+          top: -130px;
+         right: 180px;
+         width: 220px;
+         height: 220px;
+        }
+        .benefits-content {
+          grid-template-columns: 1fr;
+        }
+
+        .section-header h2 {
+          font-size: 2rem;
+        }
+      }
 
     </style>
   </head>
@@ -459,7 +504,7 @@
         <div class="deco2"></div>
       </div>
     </section>
-    <section id="features">
+    <section id="features" >
       <div class="container">
         <div class="section-header">
           <h2>Why?</h2>
@@ -476,6 +521,7 @@
       </div>
     </section>
     <section id="benefits" class="benefits">
+      <div class="container">
       <img src="./larrydrawing.png" class="larrydraw" />
       <img src="./larrydrawingflipped.png" class="larrydraw larrydrawflip" />
       <div class="section-header">
@@ -498,7 +544,7 @@
         <a href="#" class="btn btn-primary" style="line-height: 16px"
         >View Examples</a
       >
-      </div>
+      </div></div>
 
     </section>
 
