@@ -1,0 +1,163 @@
+</html>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Veform Playground</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/monokai.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+        :root {
+            --primary-light: #6FAE8D;
+            --primary: #5A9B7A;
+            --primary-dark: #4A8567;
+            --secondary-dark: #66527D;
+            --secondary: #8F7BA3;
+            --accent: #E89B6E;
+            --accent-dark: #C76A3A;
+            --dark: #3D3426;
+            --dark-light: #5A4F3F;
+            --gray: #8B7E6B;
+            --light: #E8DCC8;
+            --white: #3D3426;
+            --bg-main: #E8DCC8;
+            --bg-alt: #F5EFE3;
+        }
+    
+        body {
+            font-family: "Nunito Sans", -apple-system, BlinkMacSystemFont,
+                "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", sans-serif;
+            background: var(--bg-main);
+            color: var(--white);
+            overflow-x: hidden;
+            margin: 0;
+        }
+    
+        .container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+    
+        header {
+            background: rgba(232, 220, 200, 0.95);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(61, 52, 38, 0.2);
+            box-shadow: 0 2px 10px rgba(61, 52, 38, 0.1);
+        }
+    
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            box-sizing: border-box;
+        }
+        
+        nav a {
+            text-decoration: none;
+        }
+    
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 400;
+            color: var(--dark);
+        }
+    
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+            align-items: center;
+        }
+    
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+    
+        nav a:hover {
+            color: var(--secondary);
+        }
+    
+        .welcome-message {
+            width: 100%;
+            height: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+        }
+        h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .welcome-message p {
+            font-size: 1.15rem;
+        }
+
+        .larimage {
+            position: absolute;
+            width: 140px;
+            top: 120px;
+            right: 20px;
+            z-index: -1;
+           opacity: 0.25;
+        }
+        .larimageflip {
+            position: absolute;
+            width: 140px;
+            bottom: 40px;
+            left: 20px;
+            z-index: -1;
+            opacity: 0.25;
+            transform: rotate(-15deg);
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <nav>
+                <a href="https://veform.co"><div class="logo">Veform</div></a>
+                <ul class="nav-links">
+                    <li><a href="https://veform.co/documentation">Docs</a></li>
+                    <li><a href="https://veform.co/playground">Demo</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <div class="welcome-message">
+            <h3>Veform is still an early stage project</h3>
+            <p>If you have interest in collaborating or integrating Veform into your product,</br>
+                contact me at <a href="ericmcelyea@gmail.com">ericmcelyea@gmail.com</a></p>
+
+                <img src="./larrydrawing.png" class="larimage" />
+                <img src="./larrydrawingflipped.png" class="larimageflip" />
+        </div>
+  
+    
+    </div>
+
+</body>
+</html>
