@@ -6,8 +6,11 @@
     <title>Veform</title>
     <meta
       name="description"
-      content="Transform your app's forms into natural voice conversations. ConversAI brings intelligent audio-driven form completion to your products."
+      content="Turn any form into a conversation."
     />
+    <link rel="icon" type="image/jpeg" sizes="32x32" href="./larryicon32x32.jpeg">
+    <link rel="icon" type="image/jpeg" sizes="16x16" href="./larryicon16x16.jpeg">
+    <link rel="apple-touch-icon" sizes="180x180" href="./larryicon180x180.jpeg">
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -22,7 +25,7 @@
         --primary-dark: #4A8567;
         --secondary-dark: #66527D;
         --secondary: #8F7BA3;
-        --accent: #E89B6E;
+        --accent: #e5a682;
         --accent-dark: #C76A3A;
         --dark: #3D3426;
         --dark-light: #5A4F3F;
@@ -116,6 +119,7 @@
         padding: 6rem 1rem 4rem;
         text-align: center;
       }
+
    
       .hero h1 {
         font-size: 2.75rem;
@@ -159,12 +163,12 @@
         background: var(--accent);
         border-radius: 50%;
       }
+    
       .hero p {
-        font-size: 1.25rem;
-        font-weight: 400;
-        margin-bottom: 2rem;
-        line-height: 1.8;
         color: var(--dark);
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 2rem;
       }
 
       .section-header {
@@ -187,75 +191,15 @@
 
       /* Benefits Section */
       .benefits {
-        padding: 6rem 2rem;
+        padding: 5rem 2rem;
         position: relative;
         overflow: hidden;
       }
-
-      .benefits-content {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 4rem;
-        align-items: center;
-        margin-top: 3rem;
-      }
-
-      .benefits-list {
-        list-style: none;
-      }
-
-      .benefit-item {
-        display: flex;
-        gap: 1rem;
-        margin-bottom: 2rem;
-        align-items: flex-start;
-      }
-
-      .benefit-icon {
-        width: 30px;
-        height: 30px;
-        background: var(--primary);
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
+      .benefits p {
         color: var(--dark);
-        font-weight: bold;
+        text-align: left;
+        margin-bottom: 1rem;
       }
-
-      .benefit-item h4 {
-        font-size: 1.25rem;
-        margin-bottom: 0.5rem;
-        color: var(--dark);
-      }
-
-      .benefit-item p {
-        color: var(--gray);
-      }
-
-      .benefits-image {
-        background: linear-gradient(135deg, var(--primary), var(--secondary));
-        border-radius: 16px;
-        padding: 3rem;
-        text-align: center;
-        color: var(--dark);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        min-height: 400px;
-        position: relative;
-        overflow: hidden;
-      }
-
-      .benefits-image::before {
-        content: "🎤";
-        font-size: 10rem;
-        opacity: 0.2;
-        position: absolute;
-      }
-
-
 
       /* Buttons */
       .btn {
@@ -272,7 +216,7 @@
 
       .btn-primary {
         background: var(--primary-dark);
-        color: var(--light);
+        color: white;
         box-shadow: 0 4px 15px rgba(168, 213, 186, 0.3);
         font-weight: 700;
       }
@@ -296,7 +240,7 @@
       .larrycuteimage {
         position: absolute;
         width: 120px;
-        bottom: 0px;
+        bottom: -40px;
         right: -10px;
         z-index: 0;
         animation: cuteIn 8s ease-in-out infinite;
@@ -493,10 +437,12 @@
     <!-- Hero Section -->
     <section class="hero">
       <div class="hero-content">
-        <h1>Let your users speak</h1>
-        <p>
-          Dead simple iOS, Web and Android library for turning traditional inputs into voice
-          conversations.
+        <h2>
+          Turn any form into a conversation.
+          </h2>
+          <p>
+            Web, iOS, and Android libraries for turning traditional inputs into voice conversations.
+          </p>
         </p>
         <a href="https://veform.co/playground" class="btn btn-primary" style="line-height: 16px"
           >Try It Out</a
@@ -512,11 +458,12 @@
           <h2>Why?</h2>
           <ul style="max-width: 500px; margin: 0 auto; text-align: left;font-size: 1.125rem;">
             <li>
-              Let users fill in forms with voice conversations.
+              Let people fill in forms with voice conversations.
             </li>
-            <li>Increase engagement by making filling forms less of a chore.</li>
+            <li>Increase engagement by making input easy.</li>
+            <li>Impress your users with cutting edge voice technology.</li>
             <li>
-              Add unparalleled accessibility to your app. Offering pure audio conversations makes your app instantly accessible to users with all kinds of visual and physical impairments.
+              Add unparalleled accessibility to your app. Audio conversations give your app a level of accessibility that traditional inputs cannot match.
             </li>
           </ul>
         </div>
@@ -527,24 +474,12 @@
       <img src="./larrydrawing.png" class="larrydraw" />
       <img src="./larrydrawingflipped.png" class="larrydraw larrydrawflip" />
       <div class="section-header">
-        <h2>Seriously customizable</h2>
-        <p>UI/UX is yours, you shouldn't compromise your vision an inch for the sake of a library.</p>
-        <ul style="max-width: 500px; margin: 0 auto; text-align: left;margin-top: 2rem;">
-          <li>
-            Want a conversation only and no traditional UI?
-          </li>
-          <li>
-            Want users to be able to touch/type into inputs while having a conversation?
-          </li>
-          <li>
-            Want one touch input and the rest to be conversational?
-          </li>
-          <li>We support all that. Our philosophy is Veform offloads a specific and challenging subset of problems, but has no opinion about how you use it.</li>
-        </ul>
-      </div>
-      <div class="container" style="text-align: center; margin-top: 2rem;">
-        <a href="#" class="btn btn-primary" style="line-height: 16px"
-        >View Examples</a
+        <h2>Features</h2>
+      <div class="container">
+        <p><b>Seriously Customizable</b> - UI/UX is yours, you shouldn't compromise your vision an inch for the sake of a library.</p>
+        <p><b>Data security</b> - We store nothing, Veform parses audio and surfaces raw data for the form to you. What you do with it is up to you.</p>
+        <a href="./playground" class="btn btn-primary" style="margin-top: 1rem;"
+        >Try it in our playground</a
       >
       </div></div>
 
