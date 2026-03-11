@@ -377,9 +377,9 @@
         });
     </script>
     <script>
-        const tokenUrl = 'whatever'//'https://demo.veform.co/token';
+        const tokenUrl = 'https://demo.veform.co/token';
 
-      const veformScriptSrc = '../veform-js/dist/veform.browser.js';
+      const veformScriptSrc = "https://unpkg.com/veform-js@0.1.1/dist/veform.browser.min.js"
       const jsSuffix = `const veform = new Veform.Veform(builder);
 veform.verbose = true;
 document.getElementById('start').addEventListener('click', () => {
