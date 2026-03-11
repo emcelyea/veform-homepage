@@ -106,6 +106,7 @@
         .welcome-message {
             margin-top: 68px;
             margin-left: 16px;
+            margin-bottom: 12px;
         }
         .welcome-message h3 {
             margin-bottom: 0;
@@ -117,7 +118,7 @@
         .main-content {
             display: flex;
             flex: 1;
-            margin-top: 24px
+            margin-top: 12px;
         }
     
         .editors {
@@ -249,6 +250,18 @@
             background: #777;
         }
     
+        select {
+            background: var(--bg-main);
+            color: var(--white);
+            font-size: 1rem;
+            font-weight: 500;
+            background: var(--bg-main);
+            max-width: 180px;
+            margin-left: 16px;
+            padding: 6px;
+            border-radius: 8px;
+            outline: none;
+        }
         #preview-frame {
             width: 100%;
             height: calc(100% - 45px);
@@ -305,6 +318,15 @@
             <p>Edit code below to try different form configurations.<br/>
             View the <a href="https://veform.co/documentation">Documentation</a> to learn about all the things you can do.</p>
         </div>
+        <select id="template-select" onchange="switchTemplate(this.value)">
+            <option value="default">-- Templates --</option>
+            <option value="text">Text</option>
+            <option value="textarea">Textarea</option>
+            <option value="yesNo">Yes/No</option>
+            <option value="number">Number</option>
+            <option value="select">Select</option>
+            <option value="multiselect">Multiselect</option>
+        </select>
         <div class="main-content">
             <div id="editorSection" class="editors">
                 <div class="editor-header">
@@ -313,7 +335,7 @@
                         <button class="tab" onclick="switchTab('css')">CSS</button>
                         <button class="tab" onclick="switchTab('js')">JavaScript</button>
                     </div>
-                    <button class="run-button" onclick="runCode()">▶ Run Code</button>
+                    <button class="run-button" onclick="runCode()">▶ Run</button>
                 </div>
     
                 <div id="html-editor" class="editor-container active">
@@ -355,6 +377,417 @@
         });
     </script>
     <script>
+        const tokenUrl = 'whatever'//'https://demo.veform.co/token';
+
+      const veformScriptSrc = '../veform-js/dist/veform.browser.js';
+      const jsSuffix = `const veform = new Veform.Veform(builder);
+veform.verbose = true;
+document.getElementById('start').addEventListener('click', () => {
+  veform.start('${tokenUrl}');
+});`
+        const defaultCss = `
+body {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  min-height: 100vh;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: stretch;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 64px 24px;
+  margin: 40px auto;
+  max-width: 400px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+p {
+    color: #e94560;
+}
+select {
+    background: rgba(255, 255, 255, 0.08);
+    border: 2px solid rgba(233, 69, 96, 0.3);
+    border-radius: 8px;
+    padding: 14px 16px;
+    color: #ffffff;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    outline: none;
+}
+label {
+  color: #e94560;
+  font-weight: 600;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: -8px;
+}
+
+input, textarea {
+  background: rgba(255, 255, 255, 0.08);
+  border: 2px solid rgba(233, 69, 96, 0.3);
+  border-radius: 8px;
+  padding: 14px 16px;
+  color: #ffffff;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  outline: none;
+}
+input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  min-width: 20px;
+  padding: 0;
+  background: rgba(255, 255, 255, 0.08);
+  border: 2px solid rgba(233, 69, 96, 0.3);
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.3s ease;
+  margin-bottom: -8px;
+}
+input[type="checkbox"]:checked {
+  background: rgba(233, 69, 96, 0.25);
+  border-color: #e94560;
+}
+input[type="checkbox"]:checked::after {
+  content: '';
+  position: absolute;
+  left: 5px;
+  top: 1px;
+  width: 6px;
+  height: 10px;
+  border: 2px solid #ffffff;
+  border-top: none;
+  border-left: none;
+  transform: rotate(45deg);
+}
+
+input:focus {
+  border-color: #e94560;
+  background: rgba(233, 69, 96, 0.1);
+  box-shadow: 0 0 20px rgba(233, 69, 96, 0.2);
+}
+
+input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+.flex-centered {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.start {
+  position: absolute;
+  top: -12px;
+  right: 50%;
+  transform: translateX(50%);
+  background: linear-gradient(135deg, #e94560 0%, #ff6b6b 100%);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 25px;
+  color: white;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 15px rgba(233, 69, 96, 0.4);
+  transition: all 0.3s ease;
+}
+
+.start:hover {
+  box-shadow: 0 6px 20px rgba(233, 69, 96, 0.5);
+}`
+        const textTemplate = {
+            html: `<body>
+    <div class="container">
+        <button id="start" class="start">Start conversation</button>
+        <label for="name">Name</label>
+        <input id="name" type="text"/>
+        <label for="email">Email</label>
+        <input id="email" type="email"/>
+        <label for="phone">Phone</label>
+        <input id="phone" type="tel"/>
+        <label for="url">Website</label>
+        <input id="url" type="url"/>
+        <label for="date">Date</label>
+        <input id="date" type="date"/>
+        <label for="plain-text">Whats going on?</label>
+        <input id="plain-text" type="text"/>
+    </div>
+    <script src="${veformScriptSrc}"></s` +`cript>
+</body>`,
+css: defaultCss,        
+js: `const builder = new Veform.VeformBuilder();
+builder.addField({name: 'name', question: 'What is your name?', type: 'text'}).addValidation({
+  validate: true,
+  pattern: "name"
+})
+builder.addField({name: 'email', question: 'What is your email?', type: 'text'}).addValidation({
+  validate: true,
+  pattern: "email"
+})
+builder.addField({name: 'phone', question: 'What is your phone number?', type: 'text'}).addValidation({
+  validate: true,
+  pattern: "phone"
+})
+builder.addField({name: 'url', question: 'What is your website?', type: 'text'}).addValidation({
+  validate: true,
+  pattern: "url"
+})
+builder.addField({name: 'date', question: 'What is the date?', type: 'text'}).addValidation({
+  validate: true,
+  pattern: "date"
+})
+
+builder.addField({name: 'plain-text', question: 'Whats going on?', type: 'text'})
+
+builder.addField({name: 'goodbye', question: 'Thanks for your time, Goodbye!', type: 'info'});
+const veform = new Veform.Veform(builder);
+veform.onFocusChanged((previous, next) => {
+  document.getElementById(next).focus();
+});
+veform.onFieldValueChanged((fieldName, value) => {
+    if (fieldName === 'date') {
+        value = formatDate(value);
+    }
+  document.getElementById(fieldName).value = value;
+});
+veform.verbose = true;
+veform.onFinished(() => {
+console.log('veform finished called');
+    veform.stop()
+});
+document.getElementById('start').addEventListener('click', () => {
+  veform.start('whatever');
+})
+
+function formatDate(date) {
+    const d = new Date(date);
+    const month = d.getMonth() + 1;
+    const day = d.getDate() + 1;
+    return d.getFullYear() + '-' + (month < 10 ? '0' + month : month) + '-' + (day < 10 ? '0' + day : day);
+}`}
+
+const textareaTemplate = {
+    html: `<body>
+    <div class="container">
+        <button id="start" class="start">Start conversation</button>
+        <label for="unvalidated-textarea">Todays diet (unvalidated)</label>
+        <textarea id="unvalidated-textarea"></textarea>
+        <label for="validated-textarea">Todays diet (validated)</label>
+        <textarea id="validated-textarea"></textarea>
+    </div>
+    <script src="${veformScriptSrc}"></s` +`cript>
+</body>`,
+css: defaultCss,
+js: `const builder = new Veform.VeformBuilder();
+builder.addField({name: 'what-did-you-eat', question: 'What did you eat today?', type: 'textarea'})
+.onChange((value) => document.getElementById('unvalidated-textarea').value = value);
+
+builder.addField({name:'eat-validated', question: 'What did you eat today? This time we will check that you put food.', type: 'textarea'}).addValidation({
+  validate: true,
+  minCharacters: 20
+})
+.onChange((value) => document.getElementById('validated-textarea').value = value);
+
+builder.addField({name: 'goodbye', question: 'Wow great job today.', type: 'info'});
+${jsSuffix}`
+}
+
+    const numberTemplate = {
+        html: `<body>
+    <div class="container">
+        <button id="start" class="start">Start conversation</button>
+        <label for="num">Number</label>
+        <input id="num" type="number"/>
+        <label for="min">Min(>=10)</label>
+        <input id="min" type="number"/>
+        <label for="max">Max(<=100)</label>
+        <input id="max" type="number"/>
+        <label for="range">Range(10-20)</label>
+        <input id="range" type="number"/>
+        
+    </div>
+    <script src="${veformScriptSrc}"></s` +`cript>
+</body>`,
+css: defaultCss,
+js: `const builder = new Veform.VeformBuilder();
+builder.addField({name: 'num', question: 'Say any number?', type: 'number'});
+.onChange((value) => document.getElementById('num').value = value);
+
+builder.addField({name: 'min', question: 'What is a number greater than or equal to 10?', type: 'number'});
+.addValidation({
+  validate: true,
+  minValue: 10
+}).onChange((value) => document.getElementById('min').value = value)
+
+
+builder.addField({name: 'max', question: 'What is a number less than or equal to 100?', type: 'number'});
+.addValidation({
+  validate: true,
+  maxValue: 100
+}).onChange((value) => document.getElementById('max').value = value)
+
+builder.addField({name: 'range', question: 'What is a number between 10 and 20?', type: 'number'});
+.addValidation({
+  validate: true,
+  minValue: 10,
+  maxValue: 20
+}).onChange((value) => document.getElementById('range').value = value)
+
+builder.addField({name: 'goodbye', question: 'Ok that is all our number questions, bye!', type: 'info'});
+${jsSuffix}`
+}
+
+const yesNoTemplate = {
+    html: `<body>
+    <div class="container">
+        <button id="start" class="start">Start conversation</button>
+        <div style="display: flex;">
+            <label for="check-visit">Did you have a good visit?</label>
+            <input id="check-visit" type="checkbox"/>
+        </div>
+        
+        <div id="bad-visit-response-container" style="display: none;">
+            <label for="bad-visit-response">What can we do better?</label>
+            <textarea id="bad-visit-response"></textarea>
+        </div>
+
+        <p id="good-visit-response" style="display: none;">Great thanks!</p>
+    </div>
+    <script src="${veformScriptSrc}"></s` +`cript>
+</body>`,
+css: defaultCss,
+js: `const builder = new Veform.VeformBuilder();
+builder.addField({name: 'check-visit', question: 'Did you have a good visit?', type: 'yesNo'})
+.addBehavior(Veform.FieldEvents.VALID_YES_ANSWER, {type: Veform.FieldBehaviorType.MOVE_TO, moveToFieldName: 'good-visit'})
+.addBehavior(Veform.FieldEvents.VALID_NO_ANSWER, {type: Veform.FieldBehaviorType.MOVE_TO, moveToFieldName: 'bad-visit'})
+.onChange((likedVisit) => {
+    document.getElementById('check-visit').checked = likedVisit;
+    if (likedVisit) {
+        document.getElementById('good-visit-response').style.display = 'block';
+    } else {
+        document.getElementById('bad-visit-response-container').style.display = 'block';
+    }
+});
+
+builder.addField({name: 'bad-visit', question: 'What can we do to make it better?', type: 'textarea'})
+.addBehavior(Veform.FieldEvents.VALID_ANSWER, {type: Veform.FieldBehaviorType.MOVE_TO, moveToFieldName: 'goodbye'})
+.onChange((value) => document.getElementById('bad-visit-response').value = value);
+
+builder.addField({name: 'good-visit', question: 'Great to hear that!', type: 'info'});
+builder.addField({name: 'goodbye', question: 'Thanks for answering our survey! Goodbye!', type: 'info'});
+
+${jsSuffix}`
+}
+
+const selectTemplate = {
+    html: `<body>
+    <div class="container">
+        <button id="start" class="start">Start conversation</button>
+        <label for="role">Role?</label>
+        <select id="role">
+            <option value="">-- Select Role --</option>
+            <option value="engineer">Engineer</option>
+            <option value="marketing">Marketing</option>
+            <option value="sales">Sales</option>
+        </select>
+        <div id="engineer" style="display: none;flex-direction: column;gap: 10px;">
+            <label>What is your favorite programming language?</label>
+            <input type="text"/>
+            <label>How long have you been a developer?</label>
+            <input type="text"/>
+        </div>
+        <div id="other" style="display: none;">
+            <label>What is your budget?</label>
+            <input id="budget" type="number"/>
+        </div>
+    </div>
+    <script src="${veformScriptSrc}"></s` +`cript>
+</body>`,
+    css: defaultCss,
+    js: `const builder = new Veform.VeformBuilder();
+const roleField = builder.addField({name: 'role', question: 'What is your role?', type: 'select'});
+roleField.addSelectOption({label: 'Marketing', value: 'marketing'})
+roleField.addSelectOption({label: 'Sales', value: 'sales'})
+roleField.addSelectOption({label: 'Engineer', value: 'engineer', 
+behaviors: [{type: Veform.FieldBehaviorType.MOVE_TO, moveToFieldName: 'engineer-question'}]});
+
+roleField.onChange((value) => {
+   document.getElementById('role').value = value;
+   if (value === 'engineer') {
+    document.getElementById('engineer').style.display = 'flex';
+   } else  {
+    document.getElementById('other').style.display = 'block';
+   }
+});
+
+
+builder.addField({name: 'budget', question: 'What is your budget?', type: 'number'})
+.onChange((value) => {
+    document.getElementById('budget').value = value;
+})
+.addBehavior(Veform.FieldEvents.VALID_ANSWER, {type: Veform.FieldBehaviorType.MOVE_TO, moveToFieldName: 'goodbye'});
+
+builder.addField({name: 'engineer-question', question: 'What is your favorite programming language?', type: 'text'})
+builder.addField({name: 'engineer-question-2', question: 'How long have you been a developer?', type: 'text'})
+
+builder.addField({name: 'goodbye', question: 'That is all for now, goodbye.', type: 'info'});
+${jsSuffix}`
+}
+
+const multiselectTemplate = {
+    html: `<body>
+    <div class="container">
+        <button id="start" class="start">Start conversation</button>
+        <p >Which of these classic movies have you seen?</p>
+        <div class="flex-centered">
+            <label for="total-recall">Total Recall</label>
+            <input id="total-recall" type="checkbox"/>
+        </div>
+        <div class="flex-centered">
+            <label for="predator">Predator</label>
+            <input id="predator" type="checkbox"/>
+        </div>
+        <div class="flex-centered">
+            <label for="terminator">Terminator</label>
+            <input id="terminator" type="checkbox"/>
+        </div>
+        <div class="flex-centered">
+            <label for="terminator-2">Terminator 2</label>
+            <input id="terminator-2" type="checkbox"/>
+        </div>
+    </div>
+    <script src="${veformScriptSrc}"></s` +`cript>
+</body>`,
+css: defaultCss,
+js: `const builder = new Veform.VeformBuilder();
+builder.addField({name: 'multiselect', question: 'Which of these classic movies have you seen?', type: 'multiselect'})
+.addSelectOption({label: 'Total Recall', value: 'total-recall'})
+.addSelectOption({label: 'Predator', value: 'predator'})
+.addSelectOption({label: 'Terminator', value: 'terminator'})
+.addSelectOption({label: 'Terminator 2', value: 'terminator-2'})
+.onChange((value) => {
+    console.log('multiselect value', value);
+    const selections = value.split('|');
+    selections.forEach(selection => {
+        document.getElementById(selection).checked = true;
+    });
+});
+
+builder.addField({name: 'goodbye', question: 'Interesting, thanks for your time! Goodbye!', type: 'info'});
+
+${jsSuffix}`
+}
         // Initialize CodeMirror editors
         const htmlEditor = CodeMirror.fromTextArea(document.getElementById('html-code'), {
             mode: 'htmlmixed',
@@ -385,126 +818,54 @@
         });
 
         // Set default content
-        htmlEditor.setValue(`<body>
-    <div class="container">
-        <button id="start" class="start">Start conversation</button>
-        <label for="age">Age</label>
-        <input id="age" type="number"/>
-        <label for="name">Name</label>
-        <input id="name" type="text"/>
-    </div>
-    <script src="https://unpkg.com/veform-js@0.1.2/dist/veform.browser.min.js"></s` +`cript>
-</body>`);
+        htmlEditor.setValue(textTemplate.html);
 
-        cssEditor.setValue(`
-body {
-  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-  min-height: 100vh;
-  font-family: 'Segoe UI', system-ui, sans-serif;
-}
+        cssEditor.setValue(textTemplate.css);
 
-.container {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  align-items: stretch;
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 16px;
-  padding: 32px 24px;
-  margin: 40px auto;
-  max-width: 400px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-}
+        jsEditor.setValue(textTemplate.js);
 
-label {
-  color: #e94560;
-  font-weight: 600;
-  font-size: 14px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: -8px;
-}
-
-input {
-  background: rgba(255, 255, 255, 0.08);
-  border: 2px solid rgba(233, 69, 96, 0.3);
-  border-radius: 8px;
-  padding: 14px 16px;
-  color: #ffffff;
-  font-size: 16px;
-  transition: all 0.3s ease;
-  outline: none;
-}
-
-input:focus {
-  border-color: #e94560;
-  background: rgba(233, 69, 96, 0.1);
-  box-shadow: 0 0 20px rgba(233, 69, 96, 0.2);
-}
-
-input::placeholder {
-  color: rgba(255, 255, 255, 0.4);
-}
-
-.start {
-  position: absolute;
-  top: -12px;
-  right: 16px;
-  background: linear-gradient(135deg, #e94560 0%, #ff6b6b 100%);
-  border: none;
-  padding: 10px 20px;
-  border-radius: 25px;
-  color: white;
-  font-weight: 600;
-  font-size: 13px;
-  cursor: pointer;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  box-shadow: 0 4px 15px rgba(233, 69, 96, 0.4);
-  transition: all 0.3s ease;
-}
-
-.start:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(233, 69, 96, 0.5);
-}`);
-
-        jsEditor.setValue(`const builder = new Veform.VeformBuilder();
-const age  = builder.addField({name: 'age', question: 'What is your age?', type: 'number'});
-age.onChange((value) => {
-  const element = document.getElementById("age");
-  if (element) {
-    element.value = value;
-  }
-});
-
-const nameField = builder.addField({name: 'name', question: 'What is your name?', type: 'text'});
-nameField.addValidation({
-  validate: true,
-  pattern: "name"
-});
-nameField.onChange((value) => {
-   const element = document.getElementById("name");
-  if (element) {
-     element.value = value;
-  }
-});
-nameField.onFocus((previous, next) => {
-  const nextElement = document.getElementById(next)
-  if (nextElement) {
-     nextElement.focus();
-  }
-});
-
-builder.addField({name: 'goodbye', question: 'Thanks for your time, Goodbye!', type: 'info'});
-
-const veform = new Veform.Veform(builder.getFields());
-document.getElementById('start').addEventListener('click', () => {
-  veform.start('https://demo.veform.co/token');
-});`);
-
+        function switchTemplate(template) {
+            switch (template) {
+                case 'default':
+                    break;
+                case 'text':
+                htmlEditor.setValue(textTemplate.html);
+                    cssEditor.setValue(textTemplate.css);
+                    jsEditor.setValue(textTemplate.js);
+                    break;
+                case 'textarea':
+                    htmlEditor.setValue(textareaTemplate.html);
+                    cssEditor.setValue(textareaTemplate.css);
+                    jsEditor.setValue(textareaTemplate.js);
+                    break;
+                case 'number':
+                    htmlEditor.setValue(numberTemplate.html);
+                    cssEditor.setValue(numberTemplate.css);
+                    jsEditor.setValue(numberTemplate.js);
+                    break;
+                case 'yesNo':
+                    htmlEditor.setValue(yesNoTemplate.html);
+                    cssEditor.setValue(yesNoTemplate.css);
+                    jsEditor.setValue(yesNoTemplate.js);
+                    break;
+                case 'select':
+                    htmlEditor.setValue(selectTemplate.html);
+                    cssEditor.setValue(selectTemplate.css);
+                    jsEditor.setValue(selectTemplate.js);
+                    break;
+                case 'multiselect':
+                    htmlEditor.setValue(multiselectTemplate.html);
+                    cssEditor.setValue(multiselectTemplate.css);
+                    jsEditor.setValue(multiselectTemplate.js);
+                    break;
+                default:
+                    htmlEditor.setValue(textTemplate.html);
+                    cssEditor.setValue(textTemplate.css);
+                    jsEditor.setValue(textTemplate.js);
+                    break;
+            }
+            runCode()
+        }
         // Tab switching
         function switchTab(tab) {
             // Update tab buttons
@@ -530,9 +891,9 @@ document.getElementById('start').addEventListener('click', () => {
             iframe.srcdoc = content;
         }
 
-        // Auto-run on load
         runCode();
 
+  
     </script>
 </body>
 </html>
