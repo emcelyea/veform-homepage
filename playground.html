@@ -104,16 +104,17 @@
         }
     
         .welcome-message {
-            margin-top: 68px;
+            margin-top: 76px;
             margin-left: 16px;
             margin-bottom: 12px;
+            display: flex;
+            align-items: flex-start;
         }
-        .welcome-message h3 {
-            margin-bottom: 0;
+        .welcome-message h3, p {
+            margin: 0;
         }
         .welcome-message p {
-            margin-top: 8px;
-            margin-bottom: 8px;
+            margin-left: 16px;
         }
         .main-content {
             display: flex;
@@ -274,7 +275,10 @@
                 flex-direction: column;
                 align-items: flex-start;
             }
-    
+            .welcome-message {
+                flex-direction: column;
+                gap: 8px;
+            }
             .editors {
                 border-right: none;
                 order: 2;
@@ -320,12 +324,9 @@
         </div>
         <select id="template-select" onchange="switchTemplate(this.value)">
             <option value="default">-- Templates --</option>
-            <option value="text">Text</option>
-            <option value="textarea">Textarea</option>
-            <option value="yesNo">Yes/No</option>
-            <option value="number">Number</option>
-            <option value="select">Select</option>
-            <option value="multiselect">Multiselect</option>
+            <option value="support-request">Support Request</option>
+            <option value="event-registration">Event Registration</option>
+            <option value="product-feedback">Product Feedback</option>
         </select>
         <div class="main-content">
             <div id="editorSection" class="editors">
@@ -379,7 +380,7 @@
     <script>
         const tokenUrl = 'https://demo.veform.co/token';
 
-      const veformScriptSrc = "https://unpkg.com/veform-js@0.1.4/dist/veform.browser.min.js"
+      const veformScriptSrc = 'https://unpkg.com/veform-js@0.1.5/dist/veform.browser.min.js';
       const jsSuffix = `const veform = new Veform.Veform(builder);
 veform.verbose = true;
 document.getElementById('start').addEventListener('click', () => {
@@ -387,57 +388,82 @@ document.getElementById('start').addEventListener('click', () => {
 });`
         const defaultCss = `
 body {
-  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  background: linear-gradient(135deg, #f4f7fb 0%, #e7f0ff 50%, #d8eff0 100%);
   min-height: 100vh;
   font-family: 'Segoe UI', system-ui, sans-serif;
+  color: #1f2933;
+}
+
+div  {
+    display:flex;
+    flex-direction: column;
 }
 
 .container {
+position: relative;
   display: flex;
   flex-direction: column;
   gap: 16px;
   align-items: stretch;
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #ffffff;
   border-radius: 16px;
-  padding: 64px 24px;
+  padding: 48px 24px 32px;
   margin: 40px auto;
-  max-width: 400px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-}
-p {
-    color: #e94560;
-}
-select {
-    background: rgba(255, 255, 255, 0.08);
-    border: 2px solid rgba(233, 69, 96, 0.3);
-    border-radius: 8px;
-    padding: 14px 16px;
-    color: #ffffff;
-    font-size: 16px;
-    transition: all 0.3s ease;
-    outline: none;
-}
-label {
-  color: #e94560;
-  font-weight: 600;
-  font-size: 14px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: -8px;
+  max-width: 420px;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.12);
 }
 
-input, textarea {
-  background: rgba(255, 255, 255, 0.08);
-  border: 2px solid rgba(233, 69, 96, 0.3);
-  border-radius: 8px;
-  padding: 14px 16px;
-  color: #ffffff;
-  font-size: 16px;
-  transition: all 0.3s ease;
+p {
+  color: #4b5563;
+  margin: 0 0 8px;
+}
+
+select {
+  background: #f9fafb;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  padding: 12px 14px;
+  color: #111827;
+  font-size: 15px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
   outline: none;
 }
+
+select:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+  background: #ffffff;
+}
+
+label {
+  color: #374151;
+  font-weight: 600;
+  font-size: 14px;
+  text-transform: none;
+  letter-spacing: 0.01em;
+  margin-bottom: 4px;
+  margin-top: 8px;
+}
+
+input,
+textarea {
+  background: #f9fafb;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  padding: 12px 14px;
+  color: #111827;
+  font-size: 15px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  outline: none;
+font-family: 'Segoe UI', system-ui, sans-serif;
+font-weight: 400;
+}
+
+textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
 input[type="checkbox"] {
   appearance: none;
   -webkit-appearance: none;
@@ -445,23 +471,30 @@ input[type="checkbox"] {
   height: 20px;
   min-width: 20px;
   padding: 0;
-  background: rgba(255, 255, 255, 0.08);
-  border: 2px solid rgba(233, 69, 96, 0.3);
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
   border-radius: 6px;
   cursor: pointer;
   position: relative;
-  transition: all 0.3s ease;
-  margin-bottom: -8px;
+  transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+  margin-bottom: -4px;
 }
+
+input[type="checkbox"]:hover {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
 input[type="checkbox"]:checked {
-  background: rgba(233, 69, 96, 0.25);
-  border-color: #e94560;
+  background: #3b82f6;
+  border-color: #2563eb;
 }
+
 input[type="checkbox"]:checked::after {
   content: '';
   position: absolute;
   left: 5px;
-  top: 1px;
+  top: 2px;
   width: 6px;
   height: 10px;
   border: 2px solid #ffffff;
@@ -470,42 +503,410 @@ input[type="checkbox"]:checked::after {
   transform: rotate(45deg);
 }
 
-input:focus {
-  border-color: #e94560;
-  background: rgba(233, 69, 96, 0.1);
-  box-shadow: 0 0 20px rgba(233, 69, 96, 0.2);
+input:focus,
+textarea:focus {
+  border-color: #3b82f6;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
 }
 
-input::placeholder {
-  color: rgba(255, 255, 255, 0.4);
+input::placeholder,
+textarea::placeholder {
+  color: #9ca3af;
 }
+
 .flex-centered {
   display: flex;
   align-items: center;
   gap: 10px;
 }
+
 .start {
   position: absolute;
-  top: -12px;
+  top: -16px;
   right: 50%;
   transform: translateX(50%);
-  background: linear-gradient(135deg, #e94560 0%, #ff6b6b 100%);
+  background: linear-gradient(135deg, #34d399 0%, #22c55e 50%, #16a6d9 100%);
   border: none;
-  padding: 10px 20px;
-  border-radius: 25px;
+  padding: 10px 22px;
+  border-radius: 999px;
   color: white;
   font-weight: 600;
   font-size: 13px;
   cursor: pointer;
   text-transform: uppercase;
-  letter-spacing: 1px;
-  box-shadow: 0 4px 15px rgba(233, 69, 96, 0.4);
-  transition: all 0.3s ease;
+  letter-spacing: 0.08em;
+  box-shadow: 0 8px 20px rgba(34, 197, 94, 0.35);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
 }
 
 .start:hover {
-  box-shadow: 0 6px 20px rgba(233, 69, 96, 0.5);
+  transform: translateX(50%) translateY(-1px);
+  box-shadow: 0 10px 25px rgba(34, 197, 94, 0.4);
+  filter: brightness(1.03);
+}
+
+.start:active {
+  transform: translateX(50%) translateY(0);
+  box-shadow: 0 6px 16px rgba(34, 197, 94, 0.35);
 }`
+
+//#### SUPPORT REQUEST TEMPLATE ####
+//###########################
+    const supportRequestTemplate = {
+        html: `
+<!-- 
+    This demonstrates using callbacks during the conversation to update the UI as the user progresses.
+    Veform does not know about frontend UI, so users could edit or update via traditional inputs while conversing.
+-->
+<body>
+    <div class="container">
+        <button id="start" class="start">Start conversation</button>
+        <label for="issue-type">Issue type</label>
+        <select id="issue-type">
+            <option value="technical-support">Technical Support</option>
+            <option value="shipping-issue">Shipping Issue</option>
+        </select>
+        <div id="tech-support-section" style="display: none;">
+            <p>Technical Support</p>
+            <label for="tech-support-textarea">Can you describe the problem?</label>
+            <textarea id="tech-support-textarea"></textarea>
+            <label for="tech-support-email">Email</label>
+            <input id="tech-support-email" type="email"/>
+        </div>
+        <div id="shipping-section" style="display: none;">
+            <p>Shipping Issue</p>
+            <label for="shipping-textarea">What went wrong?</label>
+            <textarea id="shipping-textarea"></textarea>
+            <label for="shipping-email">Email</label>
+            <input id="shipping-email" type="email"/>
+        </div>
+    </div>
+    <script src="${veformScriptSrc}"></s` +`cript>
+</body>`,
+    css: defaultCss,
+    js: `const builder = new Veform.VeformBuilder();
+    builder.addField({name: 'type', question: 'Hello! Technical support or shipping issue?', type: 'select'})
+.addSelectOption({label: 'Technical Support', value: 'technical-support',
+behaviors: [{type: Veform.FieldBehaviorType.MOVE_TO, moveToFieldName: 'tech-support'}]})
+.addSelectOption({label: 'Shipping issue', value: 'shipping-issue',
+behaviors: [{type: Veform.FieldBehaviorType.MOVE_TO, moveToFieldName: 'shipping'}]})
+.onChange((value) => {
+    document.getElementById('issue-type').value = value;
+    if (value === 'technical-support') {
+        document.getElementById('tech-support-section').style.display = 'flex';
+    } else if (value === 'shipping-issue') {
+        document.getElementById('shipping-section').style.display = 'flex';
+    }
+})
+
+builder.addField({name: 'tech-support', question: 'Can you describe your problem for tech support?', type: 'textarea'})
+.addBehavior(Veform.FieldEvents.VALID_ANSWER, {type: Veform.FieldBehaviorType.MOVE_TO, moveToFieldName: 'user-email'})
+.onChange((value) => {
+    document.getElementById('tech-support-textarea').value = value;
+})
+
+builder.addField({name: 'shipping', question: 'What were your shipping issues?', type: 'textarea'})
+.addBehavior(Veform.FieldEvents.VALID_ANSWER, {type: Veform.FieldBehaviorType.MOVE_TO, moveToFieldName: 'user-email'})
+.onChange((value) => {
+    document.getElementById('shipping-textarea').value = value;
+})
+builder.addField({name: 'user-email', question: 'What is the best email for us to get back to you at?', type: 'text'}).addValidation({
+  validate: true,
+  pattern: "email"
+})
+.onChange((value) => {
+    document.getElementById('shipping-email').value = value;
+    document.getElementById('tech-support-email').value = value;
+})
+
+builder.addField({name: 'review', question: 'Are you ready to submit?', type: 'yesNo'})
+.addBehavior(Veform.FieldEvents.VALID_YES_ANSWER, {type: Veform.FieldBehaviorType.END})
+.onChange((value) => {
+    // submit form
+})
+builder.addField({name: 'goodbye', question: 'Thanks, we will be in touch!', type: 'info'});
+
+const veform = new Veform.Veform(builder);
+veform.verbose = true;
+document.getElementById('start').addEventListener('click', () => {
+    veform.start('${tokenUrl}');
+});`}
+
+
+//#### EVENT REGISTRATION TEMPLATE ####
+//###########################
+    const eventRegistrationTemplate = {
+        html: `<!-- 
+    Using a conversational UI and no traditional inputs.
+-->
+<body>
+<div class="container">
+    <h3 style="position: relative;">Welcome to the event!<span class="indicator" id="user-talking">&#x1F5E3;</span><span class="indicator" id="assistant-talking">&#x1F916;</span></h3>
+    <button id="start" class="start">Register</button>
+    <div id="conversation-container" style="display: none;"></div>
+</div>
+<script src="${veformScriptSrc}"></s` +`cript>
+</body>`,
+    css: `${defaultCss}
+    .start {
+    right: 12px;
+    top: 12px;
+    transform: none;
+    }
+    .start:hover {
+    transform: none;
+    }
+    .start:active {
+    transform: none;
+    }
+    #conversation-container {
+        max-height: 400px;
+        overflow-y: scroll;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        padding: 8px;
+        border-radius: 6px;
+    }
+    .user-input {
+        align-self: flex-end;
+        background: #f0f0f0;
+        padding: 10px;
+        border-radius: 10px;
+    }
+    .assistant-response {
+        align-self: flex-start;
+        background: #e0e0e0;
+        padding: 10px;
+        border-radius: 10px;
+    }
+    .indicator {
+    display: none;
+    font-size: 32px;
+    position: absolute;
+    right: 24px;
+    top: -12px;
+    }
+    `,
+    js: `const builder = new Veform.VeformBuilder();
+builder.addField({name: 'attendee-name', question: "Hello, lets get you registered! What is your full name?", type: 'text'})
+.addValidation({
+    pattern: "name"
+});
+builder.addField({name: 'attendee-count', question: 'How many people in your party?', type: 'number'})
+.addValidation({
+    minValue: 1,
+    maxValue: 100,
+    validate: true
+});
+builder.addField({name: 'ticket-type', question: 'General Admission or VIP?', type: 'select'})
+.addSelectOption({label: 'General Admission', value: 'general-admission'})
+.addSelectOption({label: 'VIP', value: 'vip'});
+
+builder.addField({name: 'add-ons', question: 'Do you want any add-ons? We offer an all you can drink package, infinite pizza rolls, and a private backroom meeting with Henry Cavills brothers friend!', type: 'multiselect'})
+.addSelectOption({label: 'All you can drink package', value: 'all-drink-package'})
+.addSelectOption({label: 'Infinite pizza rolls', value: 'infinite-pizza-rolls'})
+.addSelectOption({label: 'Private backroom meeting with Henry Cavills brothers friend', value: 'private-backroom-meeting'});
+builder.addField({name: 'goodbye', question: 'Thanks for registering, we will send you a confirmation shortly!', type: 'info'});
+
+const formValues = {}
+const veform = new Veform.Veform(builder);
+veform.onFieldValueChanged((fieldName, value) => {
+    formValues[fieldName] = value;
+});
+veform.onAudioInStart(() => {
+    document.getElementById('user-talking').style.display = 'block';
+});
+veform.onAudioInEnd((input) => {
+    const userInput = document.createElement('p');
+    userInput.textContent = input.text;
+    userInput.classList.add('user-input');
+    document.getElementById('conversation-container').appendChild(userInput);
+    document.getElementById('user-talking').style.display = 'none';
+});
+veform.onAudioOutStart((chunk) => {
+    document.getElementById('assistant-talking').style.display = 'block';
+    const assistantResponse = document.createElement('p');
+    assistantResponse.textContent = chunk.text;
+    assistantResponse.classList.add('assistant-response');
+    document.getElementById('conversation-container').appendChild(assistantResponse);
+    document.getElementById('conversation-container').scrollTop = document.getElementById('conversation-container').scrollHeight;
+
+});
+veform.onAudioOutEnd(() => {
+    document.getElementById('assistant-talking').style.display = 'none';
+});
+veform.onFinished(() => {
+    console.log('Saving form values', formValues);
+})
+veform.verbose = true;
+document.getElementById('start').addEventListener('click', () => {
+    veform.start('${tokenUrl}');
+    document.getElementById('conversation-container').style.display = 'flex';
+});`}
+
+//#### FEEDBACK TEMPLATE ####
+//###########################
+    const feedbackTemplate = {
+        html: `<!-- 
+    Traditional form with conversation UI.
+-->
+<body>
+    <div class="form-container">
+    <div id="conversation-container" class="conversation-container" style="display: none;">
+        <p id="loading">Setting up conversation...</p>
+    </div>
+    <div class="container">
+        <div class="flex-centered" style="flex-direction: row; justify-content: space-between;">
+        <h3>We value your feedback!</h3>    <button id="start">🎤 Fill by Voice</button>
+        </div>
+        <label for="feedback-rating">How was your experience today?</label>
+        <select id="feedback-rating" name="feedback-rating">
+            <option value="">Select an option</option>
+            <option value="positive">Positive</option>
+            <option value="neutral">Neutral</option>
+            <option value="negative">Negative</option>
+        </select>
+        <label for="feedback-comments">Is there anything we could improve?</label>
+        <textarea id="feedback-comments" name="feedback-comments" rows="4" placeholder="Share any comments or suggestions"></textarea>
+    </div>
+    </div>
+    <script src="${veformScriptSrc}"></s` +`cript>
+</body>`,
+    css: `${defaultCss}
+    body {
+    margin: 0;
+    }
+    .form-container {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+    }
+    .conversation-container {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        align-items: stretch;
+        border-right: 1px solid rgba(173, 133, 255, 0.6);
+        padding: 8px 12px;
+        width: 50%;
+        height: 100vh;
+        margin-right: 4px;
+    }
+    body {
+        background: radial-gradient(circle at top, #7b5cff 0%, #2b1a4f 40%, #120824 100%);
+        color: #f8f5ff;
+    }
+    .container {
+        background-color: rgba(20, 12, 40, 0.9);
+        border-radius: 16px;
+        border: 1px solid rgba(173, 133, 255, 0.6);
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+    }
+    h3, p {
+        color: #f3e9ff;
+    }
+    label {
+        color: #e2d6ff;
+        font-weight: 500;
+    }
+    button#start {
+        background: linear-gradient(135deg, #a855ff, #7c3aed);
+        color: #ffffff;
+        border: none;
+        border-radius: 999px;
+        padding-inline: 1.75rem;
+        box-shadow: 0 10px 25px rgba(124, 58, 237, 0.55);
+        padding: 4px 8px;
+        cursor: pointer;
+    }
+
+    button#start:hover {
+        background: linear-gradient(135deg, #a042cc, #8b5cf6);
+        box-shadow: 0 14px 30px rgba(109, 62, 226, 0.7);
+    }
+    select#feedback-rating,
+    textarea#feedback-comments {
+        background-color: rgba(18, 10, 38, 0.9);
+        color: #f9f7ff;
+        border: 1px solid rgba(196, 181, 253, 0.8);
+        border-radius: 10px;
+    }
+    select#feedback-rating:focus,
+    textarea#feedback-comments:focus {
+        outline: 2px solid rgba(196, 181, 253, 0.9);
+        outline-offset: 1px;
+    }
+    textarea#feedback-comments::placeholder {
+        color: rgba(209, 196, 255, 0.75);
+    }
+    .user-input {
+        padding:  8px 12px;
+        align-self: flex-end;
+        background-color: rgba(20, 12, 40, 0.8);
+        border-radius: 16px;
+        border: 1px solid rgba(173, 133, 255, 0.6);
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+        color: #eee;
+    }
+    .assistant-response {
+        padding: 8px 12px;
+        align-self: flex-start;
+        background-color: rgba(10, 5, 20, 1);
+        border-radius: 16px;
+        border: 1px solid rgba(173, 133, 255, 0.6);
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+        color: #ddd;
+    }
+    `,
+    js: `const builder = new Veform.VeformBuilder();
+
+builder.addField({name: 'feedback-rating', question: 'Did you have a positive, negative or neutral experience today?', type: 'select'})
+.addSelectOption({label: 'Positive', value: 'positive'})
+.addSelectOption({label: 'Neutral', value: 'neutral'})
+.addSelectOption({label: 'Negative', value: 'negative'})
+.onChange((value) => {
+    document.getElementById('feedback-rating').value = value;
+});
+builder.addField({name: 'feedback-comments', question: 'Is there anything we could improve?', type: 'textarea'})
+.onChange((value) => {
+    document.getElementById('feedback-comments').value = value;
+});
+builder.addField({name: 'goodbye', question: 'Thanks for your feedback!', type: 'info'});
+const veform = new Veform.Veform(builder);
+
+veform.onLoadingStarted(() => {
+    document.getElementById('conversation-container').style.display = 'flex';
+});
+veform.onRunningStarted(() => {
+    document.getElementById('loading').style.display = 'none';
+});
+
+veform.onFinished(() => {
+    document.getElementById('conversation-container').style.display = 'none';
+});
+veform.onAudioInEnd((input) => {
+    const userInput = document.createElement('p');
+    userInput.textContent = input.text;
+    userInput.classList.add('user-input');
+    document.getElementById('conversation-container').appendChild(userInput);
+});
+
+veform.onAudioOutStart((chunk) => {
+    const assistantResponse = document.createElement('p');
+    assistantResponse.textContent = chunk.text;
+    assistantResponse.classList.add('assistant-response');
+    document.getElementById('conversation-container').appendChild(assistantResponse);
+});
+
+veform.verbose = true;
+document.getElementById('start').addEventListener('click', () => {
+    veform.start('${tokenUrl}');
+});`}
+
+    
         const textTemplate = {
             html: `<body>
     <div class="container">
@@ -528,23 +929,18 @@ input::placeholder {
 css: defaultCss,        
 js: `const builder = new Veform.VeformBuilder();
 builder.addField({name: 'name', question: 'What is your name?', type: 'text'}).addValidation({
-  validate: true,
   pattern: "name"
 })
 builder.addField({name: 'email', question: 'What is your email?', type: 'text'}).addValidation({
-  validate: true,
   pattern: "email"
 })
 builder.addField({name: 'phone', question: 'What is your phone number?', type: 'text'}).addValidation({
-  validate: true,
   pattern: "phone"
 })
 builder.addField({name: 'url', question: 'What is your website?', type: 'text'}).addValidation({
-  validate: true,
   pattern: "url"
 })
 builder.addField({name: 'date', question: 'What is the date?', type: 'text'}).addValidation({
-  validate: true,
   pattern: "date"
 })
 
@@ -577,217 +973,6 @@ function formatDate(date) {
     return d.getFullYear() + '-' + (month < 10 ? '0' + month : month) + '-' + (day < 10 ? '0' + day : day);
 }`}
 
-const textareaTemplate = {
-    html: `<body>
-    <div class="container">
-        <button id="start" class="start">Start conversation</button>
-        <label for="unvalidated-textarea">Todays diet (unvalidated)</label>
-        <textarea id="unvalidated-textarea"></textarea>
-        <label for="validated-textarea">Todays diet (validated)</label>
-        <textarea id="validated-textarea"></textarea>
-    </div>
-    <script src="${veformScriptSrc}"></s` +`cript>
-</body>`,
-css: defaultCss,
-js: `const builder = new Veform.VeformBuilder();
-builder.addField({name: 'what-did-you-eat', question: 'What did you eat today?', type: 'textarea'})
-.onChange((value) => document.getElementById('unvalidated-textarea').value = value);
-
-builder.addField({name:'eat-validated', question: 'What did you eat today? This time we will check that you put food.', type: 'textarea'}).addValidation({
-  validate: true,
-  minCharacters: 20
-})
-.onChange((value) => document.getElementById('validated-textarea').value = value);
-
-builder.addField({name: 'goodbye', question: 'Wow great job today.', type: 'info'});
-${jsSuffix}`
-}
-
-    const numberTemplate = {
-        html: `<body>
-    <div class="container">
-        <button id="start" class="start">Start conversation</button>
-        <label for="num">Number</label>
-        <input id="num" type="number"/>
-        <label for="min">Min(>=10)</label>
-        <input id="min" type="number"/>
-        <label for="max">Max(<=100)</label>
-        <input id="max" type="number"/>
-        <label for="range">Range(10-20)</label>
-        <input id="range" type="number"/>
-        
-    </div>
-    <script src="${veformScriptSrc}"></s` +`cript>
-</body>`,
-css: defaultCss,
-js: `const builder = new Veform.VeformBuilder();
-builder.addField({name: 'num', question: 'Say any number?', type: 'number'});
-.onChange((value) => document.getElementById('num').value = value);
-
-builder.addField({name: 'min', question: 'What is a number greater than or equal to 10?', type: 'number'});
-.addValidation({
-  validate: true,
-  minValue: 10
-}).onChange((value) => document.getElementById('min').value = value)
-
-
-builder.addField({name: 'max', question: 'What is a number less than or equal to 100?', type: 'number'});
-.addValidation({
-  validate: true,
-  maxValue: 100
-}).onChange((value) => document.getElementById('max').value = value)
-
-builder.addField({name: 'range', question: 'What is a number between 10 and 20?', type: 'number'});
-.addValidation({
-  validate: true,
-  minValue: 10,
-  maxValue: 20
-}).onChange((value) => document.getElementById('range').value = value)
-
-builder.addField({name: 'goodbye', question: 'Ok that is all our number questions, bye!', type: 'info'});
-${jsSuffix}`
-}
-
-const yesNoTemplate = {
-    html: `<body>
-    <div class="container">
-        <button id="start" class="start">Start conversation</button>
-        <div style="display: flex;">
-            <label for="check-visit">Did you have a good visit?</label>
-            <input id="check-visit" type="checkbox"/>
-        </div>
-        
-        <div id="bad-visit-response-container" style="display: none;">
-            <label for="bad-visit-response">What can we do better?</label>
-            <textarea id="bad-visit-response"></textarea>
-        </div>
-
-        <p id="good-visit-response" style="display: none;">Great thanks!</p>
-    </div>
-    <script src="${veformScriptSrc}"></s` +`cript>
-</body>`,
-css: defaultCss,
-js: `const builder = new Veform.VeformBuilder();
-builder.addField({name: 'check-visit', question: 'Did you have a good visit?', type: 'yesNo'})
-.addBehavior(Veform.FieldEvents.VALID_YES_ANSWER, {type: Veform.FieldBehaviorType.MOVE_TO, moveToFieldName: 'good-visit'})
-.addBehavior(Veform.FieldEvents.VALID_NO_ANSWER, {type: Veform.FieldBehaviorType.MOVE_TO, moveToFieldName: 'bad-visit'})
-.onChange((likedVisit) => {
-    document.getElementById('check-visit').checked = likedVisit;
-    if (likedVisit) {
-        document.getElementById('good-visit-response').style.display = 'block';
-    } else {
-        document.getElementById('bad-visit-response-container').style.display = 'block';
-    }
-});
-
-builder.addField({name: 'bad-visit', question: 'What can we do to make it better?', type: 'textarea'})
-.addBehavior(Veform.FieldEvents.VALID_ANSWER, {type: Veform.FieldBehaviorType.MOVE_TO, moveToFieldName: 'goodbye'})
-.onChange((value) => document.getElementById('bad-visit-response').value = value);
-
-builder.addField({name: 'good-visit', question: 'Great to hear that!', type: 'info'});
-builder.addField({name: 'goodbye', question: 'Thanks for answering our survey! Goodbye!', type: 'info'});
-
-${jsSuffix}`
-}
-
-const selectTemplate = {
-    html: `<body>
-    <div class="container">
-        <button id="start" class="start">Start conversation</button>
-        <label for="role">Role?</label>
-        <select id="role">
-            <option value="">-- Select Role --</option>
-            <option value="engineer">Engineer</option>
-            <option value="marketing">Marketing</option>
-            <option value="sales">Sales</option>
-        </select>
-        <div id="engineer" style="display: none;flex-direction: column;gap: 10px;">
-            <label>What is your favorite programming language?</label>
-            <input type="text"/>
-            <label>How long have you been a developer?</label>
-            <input type="text"/>
-        </div>
-        <div id="other" style="display: none;">
-            <label>What is your budget?</label>
-            <input id="budget" type="number"/>
-        </div>
-    </div>
-    <script src="${veformScriptSrc}"></s` +`cript>
-</body>`,
-    css: defaultCss,
-    js: `const builder = new Veform.VeformBuilder();
-const roleField = builder.addField({name: 'role', question: 'What is your role?', type: 'select'});
-roleField.addSelectOption({label: 'Marketing', value: 'marketing'})
-roleField.addSelectOption({label: 'Sales', value: 'sales'})
-roleField.addSelectOption({label: 'Engineer', value: 'engineer', 
-behaviors: [{type: Veform.FieldBehaviorType.MOVE_TO, moveToFieldName: 'engineer-question'}]});
-
-roleField.onChange((value) => {
-   document.getElementById('role').value = value;
-   if (value === 'engineer') {
-    document.getElementById('engineer').style.display = 'flex';
-   } else  {
-    document.getElementById('other').style.display = 'block';
-   }
-});
-
-
-builder.addField({name: 'budget', question: 'What is your budget?', type: 'number'})
-.onChange((value) => {
-    document.getElementById('budget').value = value;
-})
-.addBehavior(Veform.FieldEvents.VALID_ANSWER, {type: Veform.FieldBehaviorType.MOVE_TO, moveToFieldName: 'goodbye'});
-
-builder.addField({name: 'engineer-question', question: 'What is your favorite programming language?', type: 'text'})
-builder.addField({name: 'engineer-question-2', question: 'How long have you been a developer?', type: 'text'})
-
-builder.addField({name: 'goodbye', question: 'That is all for now, goodbye.', type: 'info'});
-${jsSuffix}`
-}
-
-const multiselectTemplate = {
-    html: `<body>
-    <div class="container">
-        <button id="start" class="start">Start conversation</button>
-        <p >Which of these classic movies have you seen?</p>
-        <div class="flex-centered">
-            <label for="total-recall">Total Recall</label>
-            <input id="total-recall" type="checkbox"/>
-        </div>
-        <div class="flex-centered">
-            <label for="predator">Predator</label>
-            <input id="predator" type="checkbox"/>
-        </div>
-        <div class="flex-centered">
-            <label for="terminator">Terminator</label>
-            <input id="terminator" type="checkbox"/>
-        </div>
-        <div class="flex-centered">
-            <label for="terminator-2">Terminator 2</label>
-            <input id="terminator-2" type="checkbox"/>
-        </div>
-    </div>
-    <script src="${veformScriptSrc}"></s` +`cript>
-</body>`,
-css: defaultCss,
-js: `const builder = new Veform.VeformBuilder();
-builder.addField({name: 'multiselect', question: 'Which of these classic movies have you seen?', type: 'multiselect'})
-.addSelectOption({label: 'Total Recall', value: 'total-recall'})
-.addSelectOption({label: 'Predator', value: 'predator'})
-.addSelectOption({label: 'Terminator', value: 'terminator'})
-.addSelectOption({label: 'Terminator 2', value: 'terminator-2'})
-.onChange((value) => {
-    console.log('multiselect value', value);
-    const selections = value.split('|');
-    selections.forEach(selection => {
-        document.getElementById(selection).checked = true;
-    });
-});
-
-builder.addField({name: 'goodbye', question: 'Interesting, thanks for your time! Goodbye!', type: 'info'});
-
-${jsSuffix}`
-}
         // Initialize CodeMirror editors
         const htmlEditor = CodeMirror.fromTextArea(document.getElementById('html-code'), {
             mode: 'htmlmixed',
@@ -818,11 +1003,14 @@ ${jsSuffix}`
         });
 
         // Set default content
-        htmlEditor.setValue(textTemplate.html);
-
-        cssEditor.setValue(textTemplate.css);
-
-        jsEditor.setValue(textTemplate.js);
+        if (location.hash) {
+            switchTemplate(location.hash.slice(1));
+            document.getElementById('template-select').value = location.hash.slice(1);
+        } else {
+            htmlEditor.setValue(supportRequestTemplate.html);
+            cssEditor.setValue(supportRequestTemplate.css);
+            jsEditor.setValue(supportRequestTemplate.js);
+        }
 
         function switchTemplate(template) {
             switch (template) {
@@ -833,37 +1021,28 @@ ${jsSuffix}`
                     cssEditor.setValue(textTemplate.css);
                     jsEditor.setValue(textTemplate.js);
                     break;
-                case 'textarea':
-                    htmlEditor.setValue(textareaTemplate.html);
-                    cssEditor.setValue(textareaTemplate.css);
-                    jsEditor.setValue(textareaTemplate.js);
+                case 'support-request':
+                    htmlEditor.setValue(supportRequestTemplate.html);
+                    cssEditor.setValue(supportRequestTemplate.css);
+                    jsEditor.setValue(supportRequestTemplate.js);
                     break;
-                case 'number':
-                    htmlEditor.setValue(numberTemplate.html);
-                    cssEditor.setValue(numberTemplate.css);
-                    jsEditor.setValue(numberTemplate.js);
+                case 'event-registration':
+                    htmlEditor.setValue(eventRegistrationTemplate.html);
+                    cssEditor.setValue(eventRegistrationTemplate.css);
+                    jsEditor.setValue(eventRegistrationTemplate.js);
                     break;
-                case 'yesNo':
-                    htmlEditor.setValue(yesNoTemplate.html);
-                    cssEditor.setValue(yesNoTemplate.css);
-                    jsEditor.setValue(yesNoTemplate.js);
-                    break;
-                case 'select':
-                    htmlEditor.setValue(selectTemplate.html);
-                    cssEditor.setValue(selectTemplate.css);
-                    jsEditor.setValue(selectTemplate.js);
-                    break;
-                case 'multiselect':
-                    htmlEditor.setValue(multiselectTemplate.html);
-                    cssEditor.setValue(multiselectTemplate.css);
-                    jsEditor.setValue(multiselectTemplate.js);
+                case 'product-feedback':
+                    htmlEditor.setValue(feedbackTemplate.html);
+                    cssEditor.setValue(feedbackTemplate.css);
+                    jsEditor.setValue(feedbackTemplate.js);
                     break;
                 default:
-                    htmlEditor.setValue(textTemplate.html);
-                    cssEditor.setValue(textTemplate.css);
-                    jsEditor.setValue(textTemplate.js);
+                    htmlEditor.setValue(supportRequestTemplate.html);
+                    cssEditor.setValue(supportRequestTemplate.css);
+                    jsEditor.setValue(supportRequestTemplate.js);
                     break;
             }
+            location.hash = template;
             runCode()
         }
         // Tab switching
