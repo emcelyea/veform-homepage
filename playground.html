@@ -324,9 +324,10 @@
         </div>
         <select id="template-select" onchange="switchTemplate(this.value)">
             <option value="default">-- Templates --</option>
+            <option value="product-feedback">Product Feedback</option>
             <option value="support-request">Support Request</option>
             <option value="event-registration">Event Registration</option>
-            <option value="product-feedback">Product Feedback</option>
+            <option value="dynamic-goal">Daily Goals</option>
         </select>
         <div class="main-content">
             <div id="editorSection" class="editors">
@@ -380,7 +381,7 @@
     <script>
         const tokenUrl = 'https://demo.veform.co/token';
 
-      const veformScriptSrc = 'https://unpkg.com/veform-js@0.1.5/dist/veform.browser.min.js';
+      const veformScriptSrc = 'https://unpkg.com/veform-js@0.1.6/dist/veform.browser.min.js';
       const jsSuffix = `const veform = new Veform.Veform(builder);
 veform.verbose = true;
 document.getElementById('start').addEventListener('click', () => {
@@ -521,6 +522,17 @@ textarea::placeholder {
   gap: 10px;
 }
 
+button {
+  border: none;
+  padding: 10px 12px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
 .start {
   position: absolute;
   top: -16px;
@@ -564,6 +576,7 @@ textarea::placeholder {
         <button id="start" class="start">Start conversation</button>
         <label for="issue-type">Issue type</label>
         <select id="issue-type">
+            <option value="">-- Issue type --</option>
             <option value="technical-support">Technical Support</option>
             <option value="shipping-issue">Shipping Issue</option>
         </select>
@@ -581,12 +594,16 @@ textarea::placeholder {
             <label for="shipping-email">Email</label>
             <input id="shipping-email" type="email"/>
         </div>
+        <div id="complete-section" style="display: none;">
+            <p>Complete</p>
+            <p>Thanks for your help, we will be in touch shortly!</p>
+        </div>
     </div>
     <script src="${veformScriptSrc}"></s` +`cript>
 </body>`,
     css: defaultCss,
     js: `const builder = new Veform.VeformBuilder();
-    builder.addField({name: 'type', question: 'Hello! Technical support or shipping issue?', type: 'select'})
+    builder.addField({name: 'type', question: 'Hello, Tech support or shipping issue?', type: 'select'})
 .addSelectOption({label: 'Technical Support', value: 'technical-support',
 behaviors: [{type: Veform.FieldBehaviorType.MOVE_TO, moveToFieldName: 'tech-support'}]})
 .addSelectOption({label: 'Shipping issue', value: 'shipping-issue',
@@ -621,13 +638,18 @@ builder.addField({name: 'user-email', question: 'What is the best email for us t
 })
 
 builder.addField({name: 'review', question: 'Are you ready to submit?', type: 'yesNo'})
-.addBehavior(Veform.FieldEvents.VALID_YES_ANSWER, {type: Veform.FieldBehaviorType.END})
-.onChange((value) => {
-    // submit form
-})
+.addBehavior(Veform.FieldEvents.VALID_YES_ANSWER, {type: Veform.FieldBehaviorType.MOVE_TO, moveToFieldName: 'goodbye'})
+.addBehavior(Veform.FieldEvents.VALID_NO_ANSWER, {type: Veform.FieldBehaviorType.MOVE_TO, moveToFieldName: 'revisit'})
+
+builder.addField({name: 'revisit', question: 'What did you want to change?', type: 'text'})
 builder.addField({name: 'goodbye', question: 'Thanks, we will be in touch!', type: 'info'});
 
 const veform = new Veform.Veform(builder);
+veform.onFinished(() => {
+   document.getElementById('complete-section').style.display = 'flex';
+   document.getElementById('shipping-section').style.display = 'none';
+   document.getElementById('tech-support-section').style.display = 'none';
+});
 veform.verbose = true;
 document.getElementById('start').addEventListener('click', () => {
     veform.start('${tokenUrl}');
@@ -640,54 +662,84 @@ document.getElementById('start').addEventListener('click', () => {
         html: `<!-- 
     Using a conversational UI and no traditional inputs.
 -->
-<body>
 <div class="container">
-    <h3 style="position: relative;">Welcome to the event!<span class="indicator" id="user-talking">&#x1F5E3;</span><span class="indicator" id="assistant-talking">&#x1F916;</span></h3>
-    <button id="start" class="start">Register</button>
+    <h3 style="position: relative;">Welcome to the event!
+        <span class="indicator" id="user-talking">&#x1F5E3;</span>
+        <span class="indicator" id="assistant-talking">&#x1F916;</span>
+    </h3>
+    <div id="results-container" style="display: none;"></div>
     <div id="conversation-container" style="display: none;"></div>
+    <button id="start" class="start">Register</button>
 </div>
 <script src="${veformScriptSrc}"></s` +`cript>
-</body>`,
+`,
     css: `${defaultCss}
+    body {
+        background: #fdf4ff;
+        color: #334155;
+    }
+    .container {
+        background: rgba(255, 255, 255, 0.96);
+        border-radius: 20px;
+        border: 1px solid rgba(148, 163, 184, 0.35);
+        box-shadow: 0 16px 40px rgba(148, 163, 184, 0.35);
+    }
     .start {
-    right: 12px;
-    top: 12px;
-    transform: none;
+        transform: none;
+        background: #a7f3d0;
+        color: #1f2933;
+        position: relative;
+        top: unset;
+        right: unset;
+        box-shadow: none;
     }
     .start:hover {
-    transform: none;
+        transform: none;
+        filter: brightness(1.02);
+        box-shadow: none;
     }
     .start:active {
-    transform: none;
+        transform: none;
+        box-shadow: none;
+    }    
+    .start:disabled {
+        background: #a7f3d0;
+        color: #1f2933;
+        opacity: 0.5;
     }
     #conversation-container {
         max-height: 400px;
-        overflow-y: scroll;
+        overflow-y: auto;
         display: flex;
         flex-direction: column;
         gap: 10px;
-        border: 1px solid rgba(0, 0, 0, 0.1);
-        padding: 8px;
-        border-radius: 6px;
+        border: 1px solid rgba(148, 163, 184, 0.45);
+        padding: 10px 12px;
+        border-radius: 14px;
     }
     .user-input {
         align-self: flex-end;
-        background: #f0f0f0;
-        padding: 10px;
-        border-radius: 10px;
+        background: rgba(248, 250, 252, 0.95);
+        padding: 10px 14px;
+        border-radius: 16px 16px 4px 16px;
+        color: #0f172a;
+        border: 1px solid rgba(148, 163, 184, 0.6);
     }
     .assistant-response {
         align-self: flex-start;
-        background: #e0e0e0;
-        padding: 10px;
-        border-radius: 10px;
+        background: rgba(239, 246, 255, 0.96);
+        padding: 10px 14px;
+        border-radius: 16px 16px 16px 4px;
+        color: #111827;
+        border: 1px solid rgba(129, 140, 248, 0.7);
     }
     .indicator {
-    display: none;
-    font-size: 32px;
-    position: absolute;
-    right: 24px;
-    top: -12px;
+        display: none;
+        font-size: 30px;
+        position: absolute;
+        right: 24px;
+        top: -12px;
+        filter: drop-shadow(0 6px 12px rgba(148, 163, 184, 0.7));
     }
     `,
     js: `const builder = new Veform.VeformBuilder();
@@ -740,9 +792,13 @@ veform.onAudioOutEnd(() => {
 });
 veform.onFinished(() => {
     console.log('Saving form values', formValues);
+    const resultsContainer = document.getElementById('results-container');
+    resultsContainer.style.display = 'flex';
+    resultsContainer.innerHTML = JSON.stringify(formValues);
 })
 veform.verbose = true;
-document.getElementById('start').addEventListener('click', () => {
+document.getElementById('start').addEventListener('click', (event) => {
+event.target.disabled = true;
     veform.start('${tokenUrl}');
     document.getElementById('conversation-container').style.display = 'flex';
 });`}
@@ -868,13 +924,20 @@ builder.addField({name: 'feedback-rating', question: 'Did you have a positive, n
 .addSelectOption({label: 'Neutral', value: 'neutral'})
 .addSelectOption({label: 'Negative', value: 'negative'})
 .onChange((value) => {
-    document.getElementById('feedback-rating').value = value;
-});
+    const feedbackSelect = document.getElementById('feedback-rating');
+    feedbackSelect.value = value;
+    feedbackSelect.blur();
+})
+.onFocus(() => {
+    const feedbackSelect = document.getElementById('feedback-rating');
+    feedbackSelect.focus();
+    feedbackSelect.showPicker();
+})
 builder.addField({name: 'feedback-comments', question: 'Is there anything we could improve?', type: 'textarea'})
 .onChange((value) => {
     document.getElementById('feedback-comments').value = value;
 });
-builder.addField({name: 'goodbye', question: 'Thanks for your feedback!', type: 'info'});
+builder.addField({name: 'goodbye', question: 'Thanks for your feedback, Goodbye!', type: 'info'});
 const veform = new Veform.Veform(builder);
 
 veform.onLoadingStarted(() => {
@@ -906,72 +969,175 @@ document.getElementById('start').addEventListener('click', () => {
     veform.start('${tokenUrl}');
 });`}
 
-    
-        const textTemplate = {
-            html: `<body>
-    <div class="container">
-        <button id="start" class="start">Start conversation</button>
-        <label for="name">Name</label>
-        <input id="name" type="text"/>
-        <label for="email">Email</label>
-        <input id="email" type="email"/>
-        <label for="phone">Phone</label>
-        <input id="phone" type="tel"/>
-        <label for="url">Website</label>
-        <input id="url" type="url"/>
-        <label for="date">Date</label>
-        <input id="date" type="date"/>
-        <label for="plain-text">Whats going on?</label>
-        <input id="plain-text" type="text"/>
-    </div>
-    <script src="${veformScriptSrc}"></s` +`cript>
-</body>`,
-css: defaultCss,        
-js: `const builder = new Veform.VeformBuilder();
-builder.addField({name: 'name', question: 'What is your name?', type: 'text'}).addValidation({
-  pattern: "name"
-})
-builder.addField({name: 'email', question: 'What is your email?', type: 'text'}).addValidation({
-  pattern: "email"
-})
-builder.addField({name: 'phone', question: 'What is your phone number?', type: 'text'}).addValidation({
-  pattern: "phone"
-})
-builder.addField({name: 'url', question: 'What is your website?', type: 'text'}).addValidation({
-  pattern: "url"
-})
-builder.addField({name: 'date', question: 'What is the date?', type: 'text'}).addValidation({
-  pattern: "date"
-})
 
-builder.addField({name: 'plain-text', question: 'Whats going on?', type: 'text'})
-
-builder.addField({name: 'goodbye', question: 'Thanks for your time, Goodbye!', type: 'info'});
-const veform = new Veform.Veform(builder);
-veform.onFocusChanged((previous, next) => {
-  document.getElementById(next).focus();
-});
-veform.onFieldValueChanged((fieldName, value) => {
-    if (fieldName === 'date') {
-        value = formatDate(value);
+const dynamicGoalTemplate = {
+    html: `<!--
+This template demonstrates users setting up their own conversation.
+-->
+<p>Add some goals for today</p>
+<div class="goal-input">
+    <input id="goal" type="text" style="width: 100%;"/>
+    <button id="add-goal" class="add-goal">Add</button>
+</div>
+<div id="goals-container"></div>
+<button id="start" disabled onclick="startConversation()">Review goals</button>
+<script src="${veformScriptSrc}"></s` +`cript>
+`,
+    css: `${defaultCss}
+    body {
+        background-color: #eee;
+        font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     }
-  document.getElementById(fieldName).value = value;
-});
-veform.verbose = true;
-veform.onFinished(() => {
-console.log('veform finished called');
-    veform.stop()
-});
-document.getElementById('start').addEventListener('click', () => {
-  veform.start('whatever');
-})
+    button {
+        background-color: #5bbf9a;
+        color: #073226;
+        border-color: rgba(0, 0, 0, 0.08);
+        font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 
-function formatDate(date) {
-    const d = new Date(date);
-    const month = d.getMonth() + 1;
-    const day = d.getDate() + 1;
-    return d.getFullYear() + '-' + (month < 10 ? '0' + month : month) + '-' + (day < 10 ? '0' + day : day);
-}`}
+    }
+    button:disabled {
+        background-color: #cfeee3;
+        color: rgba(7, 50, 38, 0.7);
+    }
+    #goals-container {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+    .goal-item {
+        display: flex;
+        flex-direction: row;
+        gap: 8px;
+        border-bottom: 1px solid #ccc;
+        height: 48px;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .goal-item:first-child {
+        border-top: 1px solid #ccc;
+        margin-top: 42px;
+    }
+    .goal-input {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 8px;
+    }
+    body > p {
+        margin-top: 32px;
+        margin-bottom: 16px;
+    }
+        p {
+        margin-bottom: 0;}
+
+    #start {
+        margin-top: 32px;
+    }
+    `,
+    js: `
+const builder = new Veform.VeformBuilder();
+builder.addField({name: 'welcome', question: 'Lets review how your goals went.', type: 'info'});
+document.getElementById('add-goal').addEventListener('click', () => {
+    const goalInput = document.getElementById('goal');
+    const goal = goalInput.value;
+    addGoal(goal);
+    goalInput.value = '';
+    goalInput.focus();
+    document.getElementById('start').disabled = false;
+});
+
+function addGoal(value) {
+    const goalElement = document.createElement('div');
+    goalElement.classList.add('goal-item');
+    const goalQuestion = document.createElement('p');
+    goalQuestion.textContent = value;
+    goalElement.appendChild(goalQuestion);
+    
+    const goalsContainer = document.getElementById('goals-container');
+    goalsContainer.appendChild(goalElement);
+    const goalCount = goalsContainer.children.length;
+
+    builder.addField({name: \`goal-\${goalCount}\`, question: \`Number \${goalCount}: \${value}\`, type: 'text'}).onChange((value) => {
+        const goalResult = document.createElement('p');
+        goalResult.textContent = value;
+        goalElement.appendChild(goalResult);
+    });
+}
+function startConversation() {
+    if (!builder.getField('goodbye')) {
+        builder.addField({name: 'goodbye', question: 'All done, goodbye!', type: 'info'});
+    }
+    const veform = new Veform.Veform(builder);
+    veform.start('${tokenUrl}');
+}
+`
+}
+    
+//         const textTemplate = {
+//             html: `<body>
+//     <div class="container">
+//         <button id="start" class="start">Start conversation</button>
+//         <label for="name">Name</label>
+//         <input id="name" type="text"/>
+//         <label for="email">Email</label>
+//         <input id="email" type="email"/>
+//         <label for="phone">Phone</label>
+//         <input id="phone" type="tel"/>
+//         <label for="url">Website</label>
+//         <input id="url" type="url"/>
+//         <label for="date">Date</label>
+//         <input id="date" type="date"/>
+//         <label for="plain-text">Whats going on?</label>
+//         <input id="plain-text" type="text"/>
+//     </div>
+//     <script src="${veformScriptSrc}"></s` +`cript>
+// </body>`,
+// css: defaultCss,        
+// js: `const builder = new Veform.VeformBuilder();
+// builder.addField({name: 'name', question: 'What is your name?', type: 'text'}).addValidation({
+//   pattern: "name"
+// })
+// builder.addField({name: 'email', question: 'What is your email?', type: 'text'}).addValidation({
+//   pattern: "email"
+// })
+// builder.addField({name: 'phone', question: 'What is your phone number?', type: 'text'}).addValidation({
+//   pattern: "phone"
+// })
+// builder.addField({name: 'url', question: 'What is your website?', type: 'text'}).addValidation({
+//   pattern: "url"
+// })
+// builder.addField({name: 'date', question: 'What is the date?', type: 'text'}).addValidation({
+//   pattern: "date"
+// })
+
+// builder.addField({name: 'plain-text', question: 'Whats going on?', type: 'text'})
+
+// builder.addField({name: 'goodbye', question: 'Thanks for your time, Goodbye!', type: 'info'});
+// const veform = new Veform.Veform(builder);
+// veform.onFocusChanged((previous, next) => {
+//   document.getElementById(next).focus();
+// });
+// veform.onFieldValueChanged((fieldName, value) => {
+//     if (fieldName === 'date') {
+//         value = formatDate(value);
+//     }
+//   document.getElementById(fieldName).value = value;
+// });
+// veform.verbose = true;
+// veform.onFinished(() => {
+// console.log('veform finished called');
+//     veform.stop()
+// });
+// document.getElementById('start').addEventListener('click', () => {
+//   veform.start('whatever');
+// })
+
+// function formatDate(date) {
+//     const d = new Date(date);
+//     const month = d.getMonth() + 1;
+//     const day = d.getDate() + 1;
+//     return d.getFullYear() + '-' + (month < 10 ? '0' + month : month) + '-' + (day < 10 ? '0' + day : day);
+// }`}
 
         // Initialize CodeMirror editors
         const htmlEditor = CodeMirror.fromTextArea(document.getElementById('html-code'), {
@@ -1007,20 +1173,25 @@ function formatDate(date) {
             switchTemplate(location.hash.slice(1));
             document.getElementById('template-select').value = location.hash.slice(1);
         } else {
-            htmlEditor.setValue(supportRequestTemplate.html);
-            cssEditor.setValue(supportRequestTemplate.css);
-            jsEditor.setValue(supportRequestTemplate.js);
+            htmlEditor.setValue(feedbackTemplate.html);
+            cssEditor.setValue(feedbackTemplate.css);
+            jsEditor.setValue(feedbackTemplate.js);
         }
 
         function switchTemplate(template) {
             switch (template) {
                 case 'default':
                     break;
-                case 'text':
-                htmlEditor.setValue(textTemplate.html);
-                    cssEditor.setValue(textTemplate.css);
-                    jsEditor.setValue(textTemplate.js);
+                case 'dynamic-goal':
+                    htmlEditor.setValue(dynamicGoalTemplate.html);
+                    cssEditor.setValue(dynamicGoalTemplate.css);
+                    jsEditor.setValue(dynamicGoalTemplate.js);
                     break;
+                // case 'text':
+                // htmlEditor.setValue(textTemplate.html);
+                //     cssEditor.setValue(textTemplate.css);
+                //     jsEditor.setValue(textTemplate.js);
+                //     break;
                 case 'support-request':
                     htmlEditor.setValue(supportRequestTemplate.html);
                     cssEditor.setValue(supportRequestTemplate.css);
@@ -1037,9 +1208,9 @@ function formatDate(date) {
                     jsEditor.setValue(feedbackTemplate.js);
                     break;
                 default:
-                    htmlEditor.setValue(supportRequestTemplate.html);
-                    cssEditor.setValue(supportRequestTemplate.css);
-                    jsEditor.setValue(supportRequestTemplate.js);
+                    htmlEditor.setValue(feedbackTemplate.html);
+                    cssEditor.setValue(feedbackTemplate.css);
+                    jsEditor.setValue(feedbackTemplate.js);
                     break;
             }
             location.hash = template;
