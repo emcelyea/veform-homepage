@@ -320,7 +320,7 @@
         <div class="welcome-message">
             <h3>Veform Playground</h3>
             <p>Edit code below to try different form configurations.<br/>
-            View the <a href="https://veform.co/documentation">Documentation</a> to learn about all the things you can do.</p>
+            These are some quick examples we put together. View the <a href="https://veform.co/documentation">Documentation</a> to learn about all the things you can do.</p>
         </div>
         <select id="template-select" onchange="switchTemplate(this.value)">
             <option value="default">-- Templates --</option>
@@ -379,9 +379,10 @@
         });
     </script>
     <script>
+        //const tokenUrl = 'wahtever';
         const tokenUrl = 'https://demo.veform.co/token';
-
-      const veformScriptSrc = 'https://unpkg.com/veform-js@0.1.7/dist/veform.browser.min.js';
+      //const veformScriptSrc = '../veform-js/dist/veform.browser.js';
+      const veformScriptSrc = 'https://unpkg.com/veform-js/dist/veform.browser.min.js';
       const jsSuffix = `const veform = new Veform.Veform(builder);
 veform.verbose = true;
 document.getElementById('start').addEventListener('click', () => {
@@ -602,8 +603,8 @@ button {
     <script src="${veformScriptSrc}"></s` +`cript>
 </body>`,
     css: defaultCss,
-    js: `const builder = new Veform.VeformBuilder();
-    builder.addField({name: 'type', question: 'Hello, Tech support or shipping issue?', type: 'select'})
+    js: `const builder = new Veform.VeformBuilder({voice: {voice: 'female-1', language: 'en-GB'}});
+builder.addField({name: 'type', question: 'Tech support or shipping issue?', type: 'select'})
 .addSelectOption({label: 'Technical Support', value: 'technical-support',
 behaviors: [{type: Veform.FieldBehaviorType.MOVE_TO, moveToFieldName: 'tech-support'}]})
 .addSelectOption({label: 'Shipping issue', value: 'shipping-issue',
@@ -742,7 +743,7 @@ document.getElementById('start').addEventListener('click', () => {
         filter: drop-shadow(0 6px 12px rgba(148, 163, 184, 0.7));
     }
     `,
-    js: `const builder = new Veform.VeformBuilder();
+    js: `const builder = new Veform.VeformBuilder({voice: {voice: 'male-1', language: 'en-GB'}});
 builder.addField({name: 'attendee-name', question: "Hello, lets get you registered! What is your full name?", type: 'text'})
 .addValidation({
     pattern: "name"

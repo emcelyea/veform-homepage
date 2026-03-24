@@ -523,26 +523,25 @@
                     </div>
                 </article>
                 <article id="introduction_authentication" class="section">
-                    <h3 class="section-heading">Setting up authentication</h3>
+                    <h3 class="section-heading">Authentication</h3>
                     <p>
-                        In progress...
+                        <strong>Requirements:</strong> <br/>
+                        <strong>Veform API key</strong> - <a href="https://veform.co/contact">contact us</a> to discuss setting one up.<br/>
+                        <strong>Backend Api endpoint</strong> - a secure endpoint that hits the veform api with your key to generate a short lived token.<br/><br/>
+                        
+                        See the <a href="#examples_authentication">Authentication Example</a> to see how to set up authentication.<br/>
+
+                        Tokens are short lived and single use, each conversation needs a new token.
                     </p>
                 </article>
                 <article id="introduction_library" class="section">
                     <h3 class="section-heading">Importing the Veform library</h3>
                     <p>
-                        To import the Veform library into your app you need to add the following script tag to your page:
+                        Can be setup with npm:
                     </p>
-                    <pre><code class="language-html">
-                        &lt;script src="https://veform.co/veform.js"&gt;&lt;/script&gt;
-                    </code></pre>
-                </article>
-                <article id="introduction_conversation" class="section">
-                    <h3 class="section-heading">Getting Started</h3>
-                    <p>
-                        In Progress...
-                    </p>
-
+                    <code>npm install veform-js</code>
+                    <p>Or you can use the browser version:</p>
+                    <code>https://unpkg.com/veform-js/dist/veform.browser.min.js</code>
                 </article>
             </section>
 
@@ -561,11 +560,41 @@
                 </div>
                 <article id="veform" class="section" >
                     <h3 class="section-heading" id="veform_class">Veform Class</h3>
-                    <code class="language-ts">new Veform(builder: <a href="#veform-builder" onclick="navigateToSection('veform-builder')">VeformBuilder</a>)</code>
+                    <code class="language-ts">new Veform(config: <a href="#veform_config" onclick="navigateToSection('veform_config')">VeformConfig</a>, builder: <a href="#veform-builder" onclick="navigateToSection('veform-builder')">VeformBuilder</a>)</code>
                     <p>
                         The `Veform` class is the main entry point for running conversational experiences on top of a form.
                         It takes a form definition and connects to the server, provides helper functions to control the conversation and exposes lifecycle events through a set of `on_____` callbacks.
                     </p>
+                    <div class="method" id="veform_config">
+                        <code class="language-ts">VeformConfig</code>
+                        <p>The configuration for the Veform instance.</p>
+                        <p><strong>Parameters</strong></p>
+                        <ul class="section-list">
+                            <li>voice?: <a href="#veform_voice_options" onclick="navigateToSection('veform_voice_options')"><code></code>VoiceOptions</code></a> - The voice to use for the conversation. Will use default voice if not provided.</li>
+                        </ul>
+                    </div>
+                    <div class="method" id="veform_voice_options">
+                        <code class="language-ts">VoiceOptions</code>
+                        <p>The options for the voice to use for the conversation.</p>
+                        <p><strong>Parameters</strong></p>
+                        <ul class="section-list">
+                            <li>voice?: string - The voice to use for the conversation. Will use default voice if not provided.</li>
+                            <li>language?: string - The language to use for the conversation. Will use default language if not provided.</li>
+                        </ul>
+                        <p>Voice options:</p>
+                        <ul class="section-list">
+                            <li>female-1</li>
+                            <li>female-2</li>
+                            <li>male-1</li>
+                            <li>male-2</li>
+                        </ul>
+                        <p>Language options:</p>
+                        <ul class="section-list">
+                            <li>en-US</li>
+                            <li>en-GB</li>
+                            <li>en-AU</li>
+                        </ul>
+                    </div>
                     <h3 class="section-subheading">Methods</h3>
                     <div class="method" id="veform_start">
                         <code class="language-ts">start(token: string): Promise&lt;boolean&gt;</code>
@@ -983,15 +1012,14 @@ app.post('/conversation-token', (req, res) => {
         },
     });
     const data = await response.json();
-    res.json(data);
+    res.json({token: data.token});
 });
                     </code></pre>
                     <hr/>
                     <p>Frontend:</p>
                     <pre><code>
+const builder = new Veform.VeformBuilder();
 const veform = new Veform.Veform(builder);
-veform.start('https://mybackend.com/conversation-token');
-// or
 const token = await fetch('https://mybackend.com/conversation-token', {
     method: 'POST',
 }).then(response => response.json()).then(data => data.token);
@@ -1156,6 +1184,9 @@ veform.start(token);
                 {term: "SelectFieldValidation", id: "veform-builder_field_selectFieldValidation"},
                 {term: "MultiselectFieldValidation", id: "veform-builder_field_multiselectFieldValidation"},
                 {term: "YesNoFieldValidation", id: "veform-builder_field_yesNoFieldValidation"},
+                {term: "VeformConfig", id: "veform_config"},
+                {term: "Example authentication", id: "examples_authentication"},
+                {term: "Example text patterns", id: "examples_text_patterns"},
 
             ]
             let sidebarIsDefault = true;
