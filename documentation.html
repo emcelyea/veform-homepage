@@ -462,7 +462,7 @@
                 <a href="https://veform.co"><div class="logo">Veform</div></a>
                 <ul class="nav-links">
                     <li><a href="https://veform.co/documentation">Docs</a></li>
-                    <li><a href="https://veform.co/playground">Demo</a></li>
+                    <li><a href="https://veform.co/playground">Playground</a></li>
                 </ul>
             </nav>
         </header>
@@ -850,7 +850,12 @@
                                     <td><code>boolean</code></td>
                                     <td><a href="#veform-builder_field_yesNoFieldValidation" onclick="navigateToSection('veform-builder_field_yesNoFieldValidation')"><code>YesNoFieldValidation</code></a></td>
                                 </tr>
-
+                                <tr>
+                                    <td><code>intent</code></td>
+                                    <td>Placeholder for non-answer intents.</td>
+                                    <td>N/A</td>
+                                    <td><a href="#veform-builder_field_intentFieldValidation" onclick="navigateToSection('veform-builder_field_intentFieldValidation')"><code>IntentFieldValidation</code></a></td>
+                                </tr>
                                 <tr>
                                     <td><code>info</code></td>
                                     <td>Informational message only.</td>
@@ -914,7 +919,7 @@
                         </ul>
                         <div class="callout">
                             Validation for text & textarea types is a bit different from traditional forms. Traditionaly a user can put anything into an `input` or `textarea` element.
-                            If you set `validate: true` we will only accept related input. For example if the question is "Describe your experience" and the user says "uhhhh whoa what?" we would ask them to clarify their answer.
+                            If you set `validate: true` we will only accept related input. For example if the question is "What was your favorite dish?" and the user says "uhhhh time for baseball." we would ask them to clarify their answer. If `validate:false` we will just return any input as valid.
                             <br/><br/>
                             Think about your desired UX when setting this up, it can be frustrating to users if they feel overly restricted.
                         </div>  
@@ -983,6 +988,16 @@ builder.addField({name: "job-type", question: "Which role are you applying for?"
                         <ul class="section-list">
                             <li>validate - Does not do anything for yes/no fields, we can either parse a yes or no or not.</li>
                         </ul>
+                    </div>
+                    <div class="method" id="veform-builder_field_intentFieldValidation">
+                        <code class="language-ts">IntentField</code>
+                        <p>Intent type fields do not return a value but let you check in on users without requiring a specific answer. They are useful for validating past inputs and naturally ending conversations or sections of a conversation.</p>
+                        <p><strong>Example:</strong></p>
+                        <pre style="margin-top: 0.5rem;"><code>
+builder.addField({name: "check-in", question: "Do you have anything else to add?", type: FieldType.INTENT})
+
+Builder.addField({name: "check-answer-change", question: "Do you want me to repeat any of your answers?", type: FieldType.INTENT})
+                        </code></pre>
                     </div>
                 </article>
                 
@@ -1187,7 +1202,7 @@ veform.start(token);
                 {term: "VeformConfig", id: "veform_config"},
                 {term: "Example authentication", id: "examples_authentication"},
                 {term: "Example text patterns", id: "examples_text_patterns"},
-
+                {term: "IntentField", id: "veform-builder_field_intentFieldValidation"},
             ]
             let sidebarIsDefault = true;
             searchInput.addEventListener("input", function () {

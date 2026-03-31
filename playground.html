@@ -55,6 +55,15 @@
             height: 100%;
         }
     
+        .container-inner {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            max-width: 1800px;
+            margin: 0 auto;
+            width: 100%;
+            margin-top: 8px;
+        }
         header {
             background: rgba(232, 220, 200, 0.95);
             position: fixed;
@@ -70,7 +79,7 @@
             justify-content: space-between;
             align-items: center;
             padding: 0.5rem;
-            max-width: 1200px;
+            max-width: 1800px;
             margin: 0 auto;
             box-sizing: border-box;
         }
@@ -312,22 +321,21 @@
                 <a href="https://veform.co"><div class="logo">Veform</div></a>
                 <ul class="nav-links">
                     <li><a href="https://veform.co/documentation">Docs</a></li>
-                    <li><a href="https://veform.co/playground">Demo</a></li>
+                    <li><a href="https://veform.co/playground">Playground</a></li>
                 </ul>
             </nav>
         </header>
-    
+        <div class="container-inner">
         <div class="welcome-message">
             <h3>Veform Playground</h3>
             <p>Edit code below to try different form configurations.<br/>
-            These are some quick examples we put together. View the <a href="https://veform.co/documentation">Documentation</a> to learn about all the things you can do.</p>
+            These are just small examples. View the <a href="https://veform.co/documentation">Documentation</a> to learn about all the things you can do.</p>
         </div>
         <select id="template-select" onchange="switchTemplate(this.value)">
             <option value="default">-- Templates --</option>
             <option value="product-feedback">Product Feedback</option>
             <option value="support-request">Support Request</option>
             <option value="event-registration">Event Registration</option>
-            <option value="dynamic-goal">Daily Goals</option>
         </select>
         <div class="main-content">
             <div id="editorSection" class="editors">
@@ -361,7 +369,7 @@
 
 
         </div>
-    
+    </div>
     </div>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
@@ -379,11 +387,13 @@
         });
     </script>
     <script>
-        //const tokenUrl = 'wahtever';
-        const tokenUrl = 'https://demo.veform.co/token';
-      //const veformScriptSrc = '../veform-js/dist/veform.browser.js';
-      const veformScriptSrc = 'https://unpkg.com/veform-js/dist/veform.browser.min.js';
-      const jsSuffix = `const veform = new Veform.Veform(builder);
+    //const tokenUrl = 'wahtever';
+    const tokenUrl = 'https://demo.veform.co/token';
+    //const honTimeUrl = 'http://localhost:8080/veform-api/hon';
+    const honTimeUrl = 'https://api.veform.co/veform-api/hon';
+    //const veformScriptSrc = '../veform-js/dist/veform.browser.js';
+    const veformScriptSrc = 'https://unpkg.com/veform-js/dist/veform.browser.min.js';
+    const jsSuffix = `const veform = new Veform.Veform(builder);
 veform.verbose = true;
 document.getElementById('start').addEventListener('click', () => {
   veform.start('${tokenUrl}');
@@ -569,8 +579,7 @@ button {
     const supportRequestTemplate = {
         html: `
 <!-- 
-    This demonstrates using callbacks during the conversation to update the UI as the user progresses.
-    Veform does not know about frontend UI, so users could edit or update via traditional inputs while conversing.
+    Demonstrates using select inputs to move conversation and UI down different branches.
 -->
 <body>
     <div class="container">
@@ -1174,9 +1183,9 @@ function startConversation() {
             switchTemplate(location.hash.slice(1));
             document.getElementById('template-select').value = location.hash.slice(1);
         } else {
-            htmlEditor.setValue(feedbackTemplate.html);
-            cssEditor.setValue(feedbackTemplate.css);
-            jsEditor.setValue(feedbackTemplate.js);
+            htmlEditor.setValue(eventRegistrationTemplate.html);
+            cssEditor.setValue(eventRegistrationTemplate.css);
+            jsEditor.setValue(eventRegistrationTemplate.js);
         }
 
         function switchTemplate(template) {
@@ -1215,6 +1224,7 @@ function startConversation() {
                     break;
             }
             location.hash = template;
+            honTime('PLAYGROUND_TEMPLATE_SELECTED', uuid);
             runCode()
         }
         // Tab switching
@@ -1240,11 +1250,22 @@ function startConversation() {
             const iframe = document.getElementById('preview-frame');
             const content = "<!DOCTYPE html><html><head><style>" + css + "</style></head><body>" + html + "<script>" + js + "</scr" + "ipt></body></html>";
             iframe.srcdoc = content;
+            honTime('PLAYGROUND_CODE_RUN', uuid);
         }
 
         runCode();
+        let uuid = localStorage.getItem('tempid');
+    if (!uuid) {
+      uuid = crypto.randomUUID();
+      localStorage.setItem('tempid', uuid);
+    }
 
-  
+        function honTime(name, id) {
+      const xmlHttpRequest = new XMLHttpRequest();
+      xmlHttpRequest.open('POST', honTimeUrl, true);
+      xmlHttpRequest.setRequestHeader('Content-Type', 'application/json');
+      xmlHttpRequest.send(JSON.stringify({name: name, id: id}));
+    }
     </script>
 </body>
 </html>
