@@ -757,7 +757,7 @@
           </form>
         </div>
         <div class="demo-container-code">
-          <pre><code class="language-javascript">function runWorkOrderDemo() {
+          <pre><code class="language-javascript">
   const builder = new Veform.VeformBuilder({
     description: 'Work order for a plumber to complete when leaving a job site.'
   });
@@ -818,8 +818,11 @@
 
   builder.addField({name: 'goodbye', question: 'We will submit it. Goodbye!', type: 'info'});
   const veform = new Veform.Veform(builder);
-  veform.start('https://demo.veform.co/token');
-}</code></pre></div>
+
+  function runWorkOrderDemo() {
+    veform.start('https://demo.veform.co/token');
+  }
+</code></pre></div>
 </div>
       </div>
       <div style="width: 100%; text-align: center;">
@@ -882,9 +885,7 @@
       uuid = crypto.randomUUID();
       localStorage.setItem('tempid', uuid);
     }
-    function runWorkOrderDemo() {
-      honTime('LANDING_DEMO_RUN', uuid);
-      const builder = new Veform.VeformBuilder({description: 'Work order for a plumber to complete when leaving a job site.'});
+    const builder = new Veform.VeformBuilder({description: 'Work order for a plumber to complete when leaving a job site.'});
       builder.addField({name: 'arrival-time', question: 'Arrival time?', type:'text'}).addValidation({
         validate: true,
         pattern: 'time'
@@ -910,8 +911,11 @@
       builder.addField({name: 'change', question: 'What would you like to change?', type: 'intent'});
       builder.addField({name: 'goodbye', question: 'We will submit it. Goodbye!', type: 'info'});
       const veform = new Veform.Veform(builder);
-      veform.start('https://demo.veform.co/token');
-    }
+    
+      function runWorkOrderDemo() {
+        honTime('LANDING_DEMO_RUN', uuid);
+        veform.start('https://demo.veform.co/token');
+      }
 
     /**
 Field service check-ins: job arrival/departure,  work completed, parts used, site notes.
