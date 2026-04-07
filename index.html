@@ -570,6 +570,17 @@
         transition: border-color 0.2s, box-shadow 0.2s;
       }
 
+      #voice-loading svg {
+        animation: spin 3s linear infinite;
+      }
+      @keyframes spin {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
       .demo-form input:focus,
       .demo-form select:focus,
       .demo-form textarea:focus {
@@ -721,15 +732,29 @@
                 <p style="margin-bottom: 0;margin: top 0;"><b>Work order:</b> #23041<br/><b>Technician:</b> Doug McDougerson</p>
                 <div></div>
               <div class="voice-button">
-                <button type="button" class="btn btn-primary btn-work" onclick="runWorkOrderDemo()">Fill with voice <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
-                  <path d="M320 64C267 64 224 107 224 160L224 288C224 341 267 384 320 384C373 384 416 341 416 288L416 160C416 107 373 64 320 64zM176 248C176 234.7 165.3 224 152 224C138.7 224 128 234.7 128 248L128 288C128 385.9 201.3 466.7 296 478.5L296 528L248 528C234.7 528 224 538.7 224 552C224 565.3 234.7 576 248 576L392 576C405.3 576 416 565.3 416 552C416 538.7 405.3 528 392 528L344 528L344 478.5C438.7 466.7 512 385.9 512 288L512 248C512 234.7 501.3 224 488 224C474.7 224 464 234.7 464 248L464 288C464 367.5 399.5 432 320 432C240.5 432 176 367.5 176 288L176 248z"/></svg></button>
-              </div>
+                <button type="button" class="btn btn-primary btn-work" onclick="runWorkOrderDemo()">
+                  <span id="voice-start">Fill with voice 
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
+                    <path d="M320 64C267 64 224 107 224 160L224 288C224 341 267 384 320 384C373 384 416 341 416 288L416 160C416 107 373 64 320 64zM176 248C176 234.7 165.3 224 152 224C138.7 224 128 234.7 128 248L128 288C128 385.9 201.3 466.7 296 478.5L296 528L248 528C234.7 528 224 538.7 224 552C224 565.3 234.7 576 248 576L392 576C405.3 576 416 565.3 416 552C416 538.7 405.3 528 392 528L344 528L344 478.5C438.7 466.7 512 385.9 512 288L512 248C512 234.7 501.3 224 488 224C474.7 224 464 234.7 464 248L464 288C464 367.5 399.5 432 320 432C240.5 432 176 367.5 176 288L176 248z"/>
+                  </svg>
+
+                  </span>
+                  <span id="voice-loading" style="display: none;">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
+                    <path d="M272 112C272 85.5 293.5 64 320 64C346.5 64 368 85.5 368 112C368 138.5 346.5 160 320 160C293.5 160 272 138.5 272 112zM272 528C272 501.5 293.5 480 320 480C346.5 480 368 501.5 368 528C368 554.5 346.5 576 320 576C293.5 576 272 554.5 272 528zM112 272C138.5 272 160 293.5 160 320C160 346.5 138.5 368 112 368C85.5 368 64 346.5 64 320C64 293.5 85.5 272 112 272zM480 320C480 293.5 501.5 272 528 272C554.5 272 576 293.5 576 320C576 346.5 554.5 368 528 368C501.5 368 480 346.5 480 320zM139 433.1C157.8 414.3 188.1 414.3 206.9 433.1C225.7 451.9 225.7 482.2 206.9 501C188.1 519.8 157.8 519.8 139 501C120.2 482.2 120.2 451.9 139 433.1zM139 139C157.8 120.2 188.1 120.2 206.9 139C225.7 157.8 225.7 188.1 206.9 206.9C188.1 225.7 157.8 225.7 139 206.9C120.2 188.1 120.2 157.8 139 139zM501 433.1C519.8 451.9 519.8 482.2 501 501C482.2 519.8 451.9 519.8 433.1 501C414.3 482.2 414.3 451.9 433.1 433.1C451.9 414.3 482.2 414.3 501 433.1z"/>
+                  </svg>
+                  </span>
+                  <span id="voice-end" style="display: none;">
+                  End Call
+                  </span>
+                </button>
+                </div>
               <div class="form-field">
-                <label for="arrival-time">Arrival</label>
+                <label for="arrival-time">Arrived at site</label>
                 <input type="time" id="arrival-time" name="arrivalTime" />
               </div>
               <div class="form-field">
-                <label for="departure-time">Departure</label>
+                <label for="departure-time">Finished at</label>
                 <input type="time" id="departure-time" name="departureTime" />
               </div>
               <div class="form-field span-2">
@@ -739,15 +764,6 @@
                   id="work-completed"
                   name="workCompleted"
                   placeholder="Describe work performed, measurements, and pass/fail…"
-                ></textarea>
-              </div>
-              <div class="form-field span-2">
-                <label for="parts-used">Parts / materials</label>
-                <textarea
-                  id="parts-used"
-                  name="partsUsed"
-                  rows="2"
-                  placeholder="Part numbers, quantities, serials if applicable…"
                 ></textarea>
               </div>
             </div>
@@ -761,6 +777,8 @@
   const builder = new Veform.VeformBuilder({
     description: 'Work order for a plumber to complete when leaving a job site.'
   });
+  builder.addField({name: 'introduction', question: "Let's do a quick review of the work done.", type:'info'})
+
   builder.addField({
     name: 'arrival-time',
     question: 'Arrival time?',
@@ -784,13 +802,7 @@
     question: 'Work completed?',
     type: 'textarea'
   }).onChange((value) => document.getElementById('work-completed').value = value);
-  
-  builder.addField({name:
-    'parts-used',
-    question: 'Parts used?',
-    type: 'textarea'
-  }).onChange((value) => document.getElementById('parts-used').value = value);
-  
+
   builder.addField({
     name: 'confirm-done',
     question: 'Are you ready to submit?',
@@ -811,14 +823,13 @@
     name: 'change',
     question: 'What would you like to change?',
     type: 'intent'
-  }).addBehavior(
-    Veform.FieldEvents.VALID_ANSWER,
-    {type: Veform.FieldBehaviorType.MOVE_TO, moveToFieldName: 'change'
   })
 
   builder.addField({name: 'goodbye', question: 'We will submit it. Goodbye!', type: 'info'});
   const veform = new Veform.Veform(builder);
-
+  veform.onRunningStarted(() => {
+    document.get
+  });
   function runWorkOrderDemo() {
     veform.start('https://demo.veform.co/token');
   }
@@ -872,8 +883,10 @@
   <script src="https://unpkg.com/veform-js/dist/veform.browser.min.js"></script>
   <!-- <script src="../veform-js/dist/veform.browser.min.js"></script> -->
   <script type="text/javascript">
-    //const honTimeUrl = 'http://localhost:8080/veform-api/hon';
+    // const honTimeUrl = 'http://localhost:8080/veform-api/hon';
     const honTimeUrl = 'https://api.veform.co/veform-api/hon';
+    const tokenUrl = 'https://demo.veform.co/token';
+    //const tokenUrl = 'wo';
     function honTime(name, id) {
       const xmlHttpRequest = new XMLHttpRequest();
       xmlHttpRequest.open('POST', honTimeUrl, true);
@@ -886,6 +899,8 @@
       localStorage.setItem('tempid', uuid);
     }
     const builder = new Veform.VeformBuilder({description: 'Work order for a plumber to complete when leaving a job site.'});
+      builder.addField({name: 'introduction', question: "Let's do a quick review of the work done.", type:'info'})
+
       builder.addField({name: 'arrival-time', question: 'Arrival time?', type:'text'}).addValidation({
         validate: true,
         pattern: 'time'
@@ -896,9 +911,6 @@
       }).onChange((value) => document.getElementById('departure-time').value = value);
       builder.addField({name: 'work-completed', question: 'Work completed?', type: 'textarea'}).onChange((value) => {
         document.getElementById('work-completed').value = value;
-      });
-      builder.addField({name: 'parts-used', question: 'Parts used?', type: 'textarea'}).onChange((value) => {
-        document.getElementById('parts-used').value = value;
       });
       builder.addField({name: 'confirm-done', question: 'Are you ready to submit?', type: 'yesNo'})
       .addBehavior(Veform.FieldEvents.VALID_YES_ANSWER, {type: Veform.FieldBehaviorType.MOVE_TO, moveToFieldName: 'goodbye'})
@@ -911,32 +923,39 @@
       builder.addField({name: 'change', question: 'What would you like to change?', type: 'intent'});
       builder.addField({name: 'goodbye', question: 'We will submit it. Goodbye!', type: 'info'});
       const veform = new Veform.Veform(builder);
-    
+
+      const startButtonContent = document.getElementById('voice-start')
+      const loadingButtonContent = document.getElementById('voice-loading')
+      const endButtonContent = document.getElementById('voice-end')
+      veform.onLoadingStarted(() => {
+        startButtonContent.style.display = 'none';
+        endButtonContent.style.display = 'none';
+        loadingButtonContent.style.display = 'block';
+      });
+      veform.onRunningStarted(() => {
+        startButtonContent.style.display = 'none';
+        loadingButtonContent.style.display = 'none';
+        endButtonContent.style.display = 'block';
+      });
+      veform.onFinished(() => {
+        startButtonContent.style.display = 'block';
+        loadingButtonContent.style.display = 'none';
+        endButtonContent.style.display = 'none';
+      });
       function runWorkOrderDemo() {
-        honTime('LANDING_DEMO_RUN', uuid);
-        veform.start('https://demo.veform.co/token');
+        console.log('veform.running', Veform.isRunning());
+        if (Veform.isRunning()) {
+          veform.stop();
+          loadingButtonContent.style.display = 'none';
+          endButtonContent.style.display = 'none';
+          startButtonContent.style.display = 'block';
+        } else {
+          honTime('LANDING_DEMO_RUN', uuid);
+
+        veform.start(tokenUrl);
+        }
+
       }
 
-    /**
-Field service check-ins: job arrival/departure,  work completed, parts used, site notes.
-Delivery/logistics updates: proof-of-delivery notes, delay reasons, route exceptions.
-Healthcare notes on the move: home visit summaries, symptom updates, medication adherence.
-Sales CRM updates: post-call notes, lead qualification, follow-up tasks.
-Expense capture: mileage logs, receipt details, per-diem notes right after purchases.
-Incident/safety reports: quick “what happened” entries while details are fresh.
-Inspection forms: equipment/building/vehicle inspections with repeated checklist comments.
-Customer support call wrap-ups: issue summary, resolution steps, disposition codes.
-Recruiting/interview feedback: immediate scorecards and candidate notes between interviews.
-Personal admin: timesheets, daily standup updates, habit/health logs.
-Best repeated “on-the-run” inputs for voice:
-
-Free-text notes/comments
-Dates/times (“arrived at 9:12”)
-Quantities and measurements
-Yes/no + short reason
-Location/context tags
-Reused phrases/macros (“No issues found”, “Customer unavailable”)
-
-     * */
   </script>
   </html>
