@@ -827,9 +827,6 @@
 
   builder.addField({name: 'goodbye', question: 'We will submit it. Goodbye!', type: 'info'});
   const veform = new Veform.Veform(builder);
-  veform.onRunningStarted(() => {
-    document.get
-  });
   function runWorkOrderDemo() {
     veform.start('https://demo.veform.co/token');
   }
@@ -880,12 +877,12 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/prism.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-css.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-javascript.min.js"></script>
-  <script src="https://unpkg.com/veform-js/dist/veform.browser.min.js"></script>
+  <script src="https://unpkg.com/veform-js@0.1.12/dist/veform.browser.min.js"></script>
   <!-- <script src="../veform-js/dist/veform.browser.min.js"></script> -->
   <script type="text/javascript">
     // const honTimeUrl = 'http://localhost:8080/veform-api/hon';
     const honTimeUrl = 'https://api.veform.co/veform-api/hon';
-    const tokenUrl = 'https://demo.veform.co/token';
+   const tokenUrl = 'https://demo.veform.co/token';
     //const tokenUrl = 'wo';
     function honTime(name, id) {
       const xmlHttpRequest = new XMLHttpRequest();
