@@ -654,7 +654,6 @@
         animation: voice-btn-pulse 2.2s ease-in-out infinite;
       }
       .demo-form .voice-button .btn-work.voice-btn-idle:hover {
-        animation: none;
         box-shadow: 0 6px 20px rgba(102, 82, 125, 0.45);
       }
       .demo-form .voice-button {
@@ -954,13 +953,11 @@
         startButtonContent.style.display = 'none';
         loadingButtonContent.style.display = 'none';
         endButtonContent.style.display = 'block';
-        voiceDemoBtn.classList.remove('voice-btn-idle');
       });
       veform.onFinished(() => {
         startButtonContent.style.display = 'block';
         loadingButtonContent.style.display = 'none';
         endButtonContent.style.display = 'none';
-        voiceDemoBtn.classList.add('voice-btn-idle');
       });
       function runWorkOrderDemo() {
         console.log('veform.running', Veform.isRunning());
@@ -969,7 +966,6 @@
           loadingButtonContent.style.display = 'none';
           endButtonContent.style.display = 'none';
           startButtonContent.style.display = 'block';
-          voiceDemoBtn.classList.add('voice-btn-idle');
         } else {
           honTime('LANDING_DEMO_RUN', uuid);
 
