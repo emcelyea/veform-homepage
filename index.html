@@ -634,9 +634,28 @@
         padding: 0.7rem 1rem;
         font-size: 1rem;
       }
+      @keyframes voice-btn-pulse {
+        0%,
+        100% {
+          transform: scale(1.05);
+          box-shadow: 0 4px 16px rgba(102, 82, 125, 0.32);
+        }
+        50% {
+          transform: scale(1);
+          box-shadow: 0 12px 30px rgba(102, 82, 125, 0.55),
+            0 0 0 8px rgba(143, 123, 163, 0.22);
+        }
+      }
       .btn-work {
         padding: 0.5rem 1rem;
         font-size: 0.8rem;
+      }
+      .demo-form .voice-button .btn-work.voice-btn-idle {
+        animation: voice-btn-pulse 2.2s ease-in-out infinite;
+      }
+      .demo-form .voice-button .btn-work.voice-btn-idle:hover {
+        animation: none;
+        box-shadow: 0 6px 20px rgba(102, 82, 125, 0.45);
       }
       .demo-form .voice-button {
         position: absolute;
@@ -732,7 +751,7 @@
                 <p style="margin-bottom: 0;margin: top 0;"><b>Work order:</b> #23041<br/><b>Technician:</b> Doug McDougerson</p>
                 <div></div>
               <div class="voice-button">
-                <button type="button" class="btn btn-primary btn-work" onclick="runWorkOrderDemo()">
+                <button type="button" class="btn btn-primary btn-work voice-btn-idle" onclick="runWorkOrderDemo()">
                   <span id="voice-start">Fill with voice 
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
                     <path d="M320 64C267 64 224 107 224 160L224 288C224 341 267 384 320 384C373 384 416 341 416 288L416 160C416 107 373 64 320 64zM176 248C176 234.7 165.3 224 152 224C138.7 224 128 234.7 128 248L128 288C128 385.9 201.3 466.7 296 478.5L296 528L248 528C234.7 528 224 538.7 224 552C224 565.3 234.7 576 248 576L392 576C405.3 576 416 565.3 416 552C416 538.7 405.3 528 392 528L344 528L344 478.5C438.7 466.7 512 385.9 512 288L512 248C512 234.7 501.3 224 488 224C474.7 224 464 234.7 464 248L464 288C464 367.5 399.5 432 320 432C240.5 432 176 367.5 176 288L176 248z"/>
@@ -924,20 +943,24 @@
       const startButtonContent = document.getElementById('voice-start')
       const loadingButtonContent = document.getElementById('voice-loading')
       const endButtonContent = document.getElementById('voice-end')
+      const voiceDemoBtn = document.querySelector('.demo-form .voice-button .btn-work')
       veform.onLoadingStarted(() => {
         startButtonContent.style.display = 'none';
         endButtonContent.style.display = 'none';
         loadingButtonContent.style.display = 'block';
+        voiceDemoBtn.classList.remove('voice-btn-idle');
       });
       veform.onRunningStarted(() => {
         startButtonContent.style.display = 'none';
         loadingButtonContent.style.display = 'none';
         endButtonContent.style.display = 'block';
+        voiceDemoBtn.classList.remove('voice-btn-idle');
       });
       veform.onFinished(() => {
         startButtonContent.style.display = 'block';
         loadingButtonContent.style.display = 'none';
         endButtonContent.style.display = 'none';
+        voiceDemoBtn.classList.add('voice-btn-idle');
       });
       function runWorkOrderDemo() {
         console.log('veform.running', Veform.isRunning());
@@ -946,6 +969,7 @@
           loadingButtonContent.style.display = 'none';
           endButtonContent.style.display = 'none';
           startButtonContent.style.display = 'block';
+          voiceDemoBtn.classList.add('voice-btn-idle');
         } else {
           honTime('LANDING_DEMO_RUN', uuid);
 
